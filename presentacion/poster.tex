@@ -1,0 +1,200 @@
+\documentclass[final]{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noquoting,es-nolists,es-noshorthands]{babel}
+\usepackage{lmodern}
+\usepackage[orientation=portrait,size=a0,scale=1.9]{beamerposter}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\graphicspath{{figuras/}{../entrega-final/figuras/}}
+
+\definecolor{tinta}{HTML}{1F2933}
+\definecolor{acento}{HTML}{2A78D6}
+\definecolor{suave}{HTML}{6B7280}
+\definecolor{fondo}{HTML}{F3F6FA}
+\setbeamercolor{normal text}{fg=tinta,bg=white}
+\setbeamercolor{structure}{fg=acento}
+\setbeamercolor{block title}{fg=white,bg=acento}
+\setbeamercolor{block body}{fg=tinta,bg=fondo}
+\setbeamerfont{block title}{size=\Large,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}{\color{acento}\textbullet}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\newcommand{\clave}[1]{{\color{acento}\bfseries #1}}
+\setlength{\parskip}{0.4ex}
+\addtobeamertemplate{block end}{}{\vspace{1.6ex}}
+
+\begin{document}
+\begin{frame}[t]
+
+% ------------------------------------------------------------------ cabecera
+\begin{center}
+{\fontsize{120}{140}\selectfont\bfseries Estructura frente a tamaño}\\[1ex]
+{\fontsize{64}{76}\selectfont Selección de conjuntos críticos en el grafo de exposición de DeFi}\\[1.2ex]
+{\Large David Sánchez Lombana \quad·\quad Juan Sebastián Cuesta Montenegro}\\[0.4ex]
+{\large\color{suave} Teoría de Grafos 2026-II · Prof.\ Daniel Bojacá · Universidad del Rosario}
+\end{center}
+\vspace{1ex}
+{\color{acento}\rule{\linewidth}{4pt}}
+\vspace{1ex}
+
+\begin{columns}[t,totalwidth=\linewidth]
+
+% ------------------------------------------------------------------ columna 1
+\begin{column}{0.31\linewidth}
+
+\begin{block}{Pregunta}
+Los protocolos DeFi reutilizan los mismos activos como colateral: la caída de
+uno se propaga. El estado del arte elige qué protocolos estresar \clave{por
+tamaño}.
+
+\vspace{0.5ex}
+\textbf{Con un presupuesto de $k$ protocolos, ¿qué conjunto fragmenta más la
+red, y lo encuentran mejor los criterios estructurales o los de tamaño?}
+\end{block}
+
+\begin{block}{Modelo}
+\begin{itemize}
+\item Panel público de DeXposure: 314 semanas, $u\to v$ si $u$ depende de $v$,
+      peso en USD.
+\item Proyección no dirigida, componente gigante $C_t$ (98--99{,}8\,\% de los
+      vértices). Problema NP-duro: heurísticas.
+\item Dos medidas de daño:
+\end{itemize}
+\[
+R_{\mathrm{est}}=\frac{\max_Q|Q|}{|C_t|},\qquad L=1-R
+\]
+\[
+R_{\mathrm{pond}}=\frac{\max_Q W_t(Q)}{W_0}
+\]
+\[
+L_{\mathrm{pond}}=L_{\mathrm{directa}}+L_{\mathrm{frag}}
+\]
+\end{block}
+
+\begin{block}{Reglas y protocolo}
+\textbf{Tamaño:} fuerza de exposición, PageRank.\\
+\textbf{Estructura:} intermediación, articulación adaptativa, CDS de
+Guha--Khuller, inmunización espectral exacta.\\
+\textbf{Controles:} voraz sin restricción, aleatorio, TVL/SIS (exploratorio).
+
+\vspace{0.5ex}
+13 semanas fijadas de antemano (un trimestre de 2022--2024 y las previas a
+Terra/Luna, FTX y USDC), $k\in\{1,2,5,10,20\}$.
+\end{block}
+
+\end{column}
+
+% ------------------------------------------------------------------ columna 2
+\begin{column}{0.36\linewidth}
+
+\begin{block}{Los dos objetivos ordenan al revés}
+\centering
+\includegraphics[width=\linewidth]{fig_curvas.pdf}
+
+\vspace{0.5ex}
+\raggedright
+\begin{tabular}{lcccc}
+\toprule
+$k=10$ & $L_{\mathrm{est}}$ & gana & $L_{\mathrm{pond}}$ & gana \\
+\midrule
+Fuerza         & 0{,}409 & 0  & 0{,}948 & 6 \\
+Intermediación & 0{,}510 & 1  & 0{,}837 & 0 \\
+PageRank       & 0{,}430 & 0  & 0{,}924 & 0 \\
+Articulación   & \textbf{0{,}522} & \textbf{12} & 0{,}867 & 0 \\
+CDS            & 0{,}445 & 0  & \textbf{0{,}942} & \textbf{7} \\
+Espectral      & 0{,}475 & 0  & 0{,}856 & 0 \\
+\bottomrule
+\end{tabular}
+\end{block}
+
+\begin{block}{Casi todo el daño ponderado es directo}
+\centering
+\includegraphics[width=\linewidth]{fig_descomposicion.pdf}
+
+\raggedright
+$L_{\mathrm{frag}}\le0{,}003$ siempre. Las reglas estructurales desconectan
+\clave{periferia de poco peso}; la ventaja de la fuerza en exposición viene de
+elegir vértices pesados.
+\end{block}
+
+\begin{block}{Dos familias de conjuntos}
+\begin{columns}[c]
+\column{0.55\linewidth}
+\includegraphics[width=\linewidth]{fig_jaccard.pdf}
+\column{0.45\linewidth}
+Jaccard fuerza--articulación 0{,}26; intermediación--articulación 0{,}65.
+El conjunto estructuralmente crítico \clave{no} es el de los más grandes.
+\end{columns}
+\end{block}
+
+\begin{block}{Herramienta \texttt{critset}}
+\begin{itemize}
+\item Python con uv; CLI reproducible y reanudable.
+\item Articulación en $O(n+m)$ por paso (Tarjan con tamaños de subárbol).
+\item Espectral exacta: $\rho(A)=\max_{\text{SCC}}\rho(A[\text{SCC}])$; solo
+      se evalúa la SCC dominante.
+\item 35 pruebas contra NetworkX y fuerza bruta.
+\end{itemize}
+\end{block}
+
+\end{column}
+
+% ------------------------------------------------------------------ columna 3
+\begin{column}{0.31\linewidth}
+
+\begin{block}{Sensibilidad: el nodo \emph{Unknown}}
+Etiqueta de contrapartes no identificadas; adyacente al 63--74\,\% de $C_t$ y
+con 43--72\,\% de $W_0$. Sin él:
+
+\vspace{0.5ex}
+\centering
+\begin{tabular}{lcc}
+\toprule
+$k=10$ & $L_{\mathrm{est}}$ & $L_{\mathrm{pond}}$ \\
+\midrule
+Fuerza       & 0{,}212 & \textbf{0{,}903} \\
+Articulación & \textbf{0{,}369} & 0{,}770 \\
+CDS          & 0{,}251 & 0{,}891 \\
+\bottomrule
+\end{tabular}
+
+\raggedright
+Articulación gana $L_{\mathrm{est}}$ las 13 semanas; fuerza o CDS ganan
+$L_{\mathrm{pond}}$. \clave{El patrón se mantiene.}
+\end{block}
+
+\begin{block}{Costo computacional}
+\centering
+\includegraphics[width=0.9\linewidth]{fig_tiempos.pdf}
+
+\raggedright
+De milisegundos (fuerza, PageRank) a una hora (espectral exacta, $k=20$).
+Todas viables para monitoreo semanal.
+\end{block}
+
+\begin{block}{Episodios y límites}
+\begin{itemize}
+\item Indicador de afectación (caída de al menos 50\,\% en 4 semanas): tasa base
+      47--67\,\%. Ninguna regla la supera en los tres episodios:
+      \clave{resultado nulo}.
+\item El TVL publicado no cubre $C_t$: TVL y SIS quedan como exploratorios.
+\end{itemize}
+\end{block}
+
+\begin{block}{Conclusiones}
+\begin{itemize}
+\item \clave{Estructura y tamaño responden a preguntas distintas}:
+      las reglas estructurales desconectan más protocolos, las de tamaño
+      retiran más exposición.
+\item El CDS es el punto de encuentro: 73--170 candidatos, a 0{,}02 del voraz.
+\item Pendiente: afectados curados, TVL completo y daño con propagación.
+\end{itemize}
+\end{block}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+\end{document}

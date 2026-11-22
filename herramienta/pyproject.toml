@@ -1,0 +1,27 @@
+[project]
+name = "critset"
+version = "1.0.0"
+description = "Selección de conjuntos críticos en el grafo de exposición inter-protocolo de DeFi"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "David Sánchez Lombana" },
+  { name = "Juan Sebastián Cuesta Montenegro" },
+]
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "pandas>=2.1",
+  "python-igraph>=0.11",
+  "matplotlib>=3.8",
+]
+
+[project.scripts]
+critset = "critset.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "networkx>=3.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

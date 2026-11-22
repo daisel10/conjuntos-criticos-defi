@@ -1,0 +1,1258 @@
+0.exchange
+01
+0vix
+0x
+0xDAO
+1inch Network
+2Pi Network
+4Swap
+AAVE V1
+AAVE V2
+ACoconut
+ADAO
+AGS Finance
+API3
+APX Finance
+APY Finance
+ARPA Staking
+AUX Exchange
+Aave Arc
+Aavegotchi
+Abracadabra Spell
+Acala
+Acala Dollar
+Acala LCDOT
+Acala Swap
+Across
+Ad-Astra Bridge
+AdaSwap
+Adamant Finance
+Aelin
+Aequinox
+Agora
+Akropolis
+Alchemist
+Alchemix
+Alcor Exchange
+Aldrin
+Algebra DEX
+Algem
+AlgoRai Finance
+Algofi Lend
+Algomint
+Alita Finance
+Allbridge Classic
+Alongside
+Alphadex
+Ambire Wallet
+Ampere
+Amulet Liquidity Staking
+Amulet V1
+Anchor
+Anedak
+Angle
+Animal Farm V1
+Antex
+Antimatter
+AnyHedge
+Ape Finance
+ApeCoin
+ApeSwap Lending
+Aperture LM
+Apricot Finance
+AptosLaunch
+Aptoswap
+Aquarius
+Arable Protocol
+ArbiNYAN
+ArbiSwap
+Arbitrove
+Arbor Finance
+Arcade.xyz
+Arcane Dex
+Archimedes Finance
+Archly V1
+Arctic
+Argo Finance
+Arkadiko
+Armor
+Arrakis V1
+Arrow
+Artemis Protocol
+ArthSwap V2
+ArthSwap V3
+Ashswap
+AstarFarm
+AstridDAO
+AstroSwap
+Astroport Classic
+Athena Money
+Athos Finance
+Atlas USV
+Atlendis
+AtoDEX
+Auctus
+Augmented Finance
+Augury Finance
+Aurigami
+Aurora Plus
+AuroraSwap
+AutoShark
+Autofarm
+Avalanche
+Avalaunch
+Avault
+Axia Protocol
+Axion
+Aztec
+Azuro
+B.Protocol
+BAO Ballast
+BAO Markets
+BAO Swap
+BFly Finance
+BNPL Pay
+BSCSwap
+BTCST
+BXH
+Babylon Finance
+Back Finance
+Backed
+BaconDAO
+Badger DAO
+Bagels Finance
+Balancer V1
+Balancer V2
+Bancor V3
+Bank of Chain
+Bankless
+BarnBridge
+BaseYield
+Based Next Generation
+Basic Attention
+Basis Cash
+BasketDAO
+BayMax
+BeamSwap Classic
+BeamSwap Stable AMM
+Beamer Bridge
+Beanstalk
+BecoSwap
+Beefy
+Beethoven X DEX
+Beethoven X sFTMx
+Bella Protocol
+Belt Finance
+BenSwap
+BendDAO APE Staking
+Benqi Lending
+Benqi Staked Avax
+Bepro Network
+BetHash
+Beta Finance V1
+BiFi
+BiSwap V3
+Bifrost Dex
+Bifrost Liquid Crowdloan
+Binance CEX
+Binance Multi Chain Capital
+BitANT
+BitVenus
+Bitcoin
+Bitfinex
+Bitget
+Bitmex
+Black Whale
+BlackBird Finance
+BlackPool
+BlastName
+BlockNG
+Blue Planet
+BlueBit
+Blur Bids
+Blur Lending
+Bodh Finance
+Bomb Finance
+Bomb Money
+Bond Protocol
+BoneSwap
+BooFinance
+BoringDAO
+BossSwap
+BrainDAO
+Brainiac Finance
+BrewSwap
+Brewlabs
+Bridge Mutual
+Bright Union
+Buffer Finance
+BullionFX
+Bunicorn
+Bunny
+BunnyPark
+BurgerSwap
+Burrow
+BusinessBuildersNFTs
+ButterSwap
+CGO Finance
+CGX Finance
+CLever
+COTI Treasury
+CVI Finance
+CafeSwap
+Camelot V2
+Canto Dex
+Canto Lending
+CantoSwap
+Cap
+Cap V4
+CapitalDEX
+CarbonSwap
+Cardano
+Cardstarter
+CashCow Finance
+Cate Ventures
+Caviar V1
+ChainPort
+Chainlink VRF V2
+Changex
+Channels Finance
+Chaotic Finance
+ChargeDeFi
+Charm Finance V1
+Chee Finance
+CherrySwap
+Chest Finance
+Chronicle
+Chronos V2
+CitaDAO
+CityCoins
+ClayStack ETH
+ClayStack Matic
+Clever Protocol
+Clipper
+CoFiX
+CoWSwap
+Coinsquare
+Coinswap Space
+Coinwind
+Comb Financial
+Cometa
+Cometh
+Commodo
+CompliFi
+Complus Network
+Component
+Compound V1
+Compound V2
+Compound V3
+Concave
+Concentrator
+Cone
+Conic Finance
+Connext
+Contango V1
+Convergence
+Convex Finance
+Cook Finance
+CoreSwap
+CorgiSwap
+CortexDAO
+Coslend
+Cover Protocol
+Covo V1
+Cozy V1
+Cranium Exchange
+Creditum
+Credix
+Crescent Dex
+Crodex
+CronaSwap
+Cronus Finance
+Cropper
+CrossChain Bridge
+Crow Finance
+CrowdSwap
+Crunchy
+CryptEx Locker
+Cryptex V1
+Cryptex V2
+Crypto-com
+Crystalvale
+Crystl Finance
+Curve DEX
+CyberTime
+CyborgSwap
+Cykura
+Cypher
+DAM Finance
+DELTAFi
+DEUS Finance
+DMD Finance
+DODO
+DOOAR
+DPEX
+DSU Money
+DXDao
+Dapp Account DAO
+DarkAuto
+DarkCrypto
+DarkSwap
+Darkness
+DeFiato
+DeFis Network
+DeGate
+DeepLock
+Defi Swap
+Defi Yield Protocol
+DefiBox
+DefiChain Loans
+DefiDollar DAO
+DefiPlaza
+DefiSaver
+Definix
+Defrost
+Degen Haus
+Delta Financial
+DeltaPrime
+DeltaTheta
+Demeter
+Demex
+DengenDex
+Depth
+Derify Protocol
+DerivaDEX
+DexHunter
+DexPad
+Dfyn Network
+Diamond Coin
+DinoSwap
+Doge Shrek
+DogeMuskSwap
+DogeSwapOrg
+Doki Doki Finance
+Domani Protocol
+Domination Finance
+Dopple Finance
+Dot Dot Finance
+DotOracle
+Drift
+Drip
+Droplit Protocol
+DuckyDeFi
+DuneSwap
+DxSale
+Dyson
+Dystopia
+ELYFI
+EMDX
+ENS
+EOS REX
+EPNS
+ETCswap
+ETHA Lend
+Ease.org
+Echidna Finance
+EcoDeFi
+Edge Protocol
+Eklipse Finance
+El Dorado Exchange
+Electrik Finance
+Elf Finance
+Elk
+Ellipsis Finance
+EmberSwap
+Embr Finance
+EmiSwap
+EmpireDEX
+Energiswap
+Energyfi
+Ensuro
+EnterDAO
+Enzyme Finance
+Equalizer Exchange
+Equilibre
+Erasure
+ErgoPad
+Eris Protocol
+Ester Finance
+Eternal Finance
+Etherberry Finance
+EthicHub
+Euler
+EvmoSwap
+Evolve
+Excalibur
+FIAT DAO
+FLRFarm
+FLRLoans
+FLRX
+FNDZ
+FODL Finance
+FORTH DAO
+FRAKT
+FairySwap V1
+Fantohm
+Fastyield Finance
+Feeder Finance
+Fei Protocol
+Ferro
+Ferrum
+FilDA
+FinNexus
+Firebird
+Firi
+Flame DeFi
+Flamincome
+Flamingo Finance
+Flexa
+Float
+Float Protocol
+FlokiFi Locker
+FluidTokens
+Fluity
+Flux Finance
+Foodcourt
+Forge SX Trade
+Forteswap
+Forthewin Network
+Fortress Loans
+Fountain Protocol
+FoxSwap
+Fractal Protocol
+Fractional Art
+Frax
+Frax Swap
+FreeRiver
+Friktion
+Fringe V1
+Frost Finance
+Fruits of Ryoshi
+FstSwap
+Fuji V1
+Furucombo
+Fusion Dex
+Fuzz Finance
+GARD
+GET Protocol
+GIBXSwap
+GMD Protocol
+GMX V1
+GOGOcoin
+GTON Capital
+Gambit Financial
+Game Theory
+Gardens DAO
+Gate-io
+Gearbox
+Geist Finance
+GemKeeper
+Genius
+Geyser
+GhostMarket
+Gin Finance
+Gitcoin
+Giveth
+Glitter Finance
+Gnosis DAO
+Goblins Cash
+Goldfinch
+Goober
+GoodDollar
+GooseFX
+GotchiVault
+Governor DAO
+Granary Finance
+Grappa Finance
+Gravity Finance
+Grizzly Trade
+Gro
+GumBall Protocol
+Guru Network
+Gyroscope Protocol
+H2Odata
+HFIone
+HMX
+HOPR
+HSwap
+HTX
+HXRO Network
+HakuSwap
+HaloDAO
+Hamburger Finance
+Harbor Protocol
+Harvest Finance
+Hashflow
+Hatom TAO Liquid Staking
+Hawksight
+HebeSwap
+Hectagon
+Hedge
+HedgeFarm
+Hera Finance
+Heraswap
+HomeCoin
+Homora V2
+Honeyswap
+HopSwap
+Hord
+Hot Cross
+Hotbit
+HoustonSwap
+Hpdex
+Hubble
+Hubble Exchange
+Huckleberry AMM
+Huckleberry Lending
+Humble Defi
+Hummus AMM
+Hundred Finance
+HunnySwap
+HydraDX
+HyperJump
+ICHI
+IDEX Classic
+INK Protocol
+IPOR
+IQ
+IceCream Finance
+IcecreamSwap
+Ideamarket
+Idle
+Illuvium
+ImmutableX
+Impermax Finance
+InVar Finance
+Increment Lending
+Increment Liquid Staking
+Increment Swap
+Index Coop
+Indexed Finance
+Instadapp
+InsurAce
+InsureDAO
+Interest Protocol
+Interlay Collateral
+Interlay Staking
+Interport Finance
+Inverse Finance FiRM
+Inverse Finance Frontier
+Investin
+Iron Bank
+Iron Finance
+Ispolink
+JEXchangeDefi
+JSwap
+Jade Protocol
+Jet V1
+JetSwap
+Jones DAO
+JulSwap
+Jumbo Exchange
+Just Yield
+JustLend
+JustMoney
+JustStables
+KACO Finance
+KDLaunch
+KDSwap
+KSwap Finance
+Kagla Finance
+Kaidex
+Karma DAO
+Karura Dollar (kUSD)
+Karura Liquid Staking
+Karura Swap
+Katana
+Katana DEX
+KatanaSwap
+Kava Boost
+Kava Earn
+Kava Lend
+Kava Liquid
+Kava Mint
+Kava Swap
+Keep3r Network
+Kine Finance
+KlaySwap
+Klayportal
+Kleros
+Klondike Finance
+Kogefarm
+Kolibri
+Kommunitas
+Korbit
+Kromatika
+KuSwap
+Kucoin
+KwikSwap
+KyberSwap Classic
+KyotoSwap
+LFGSwap Core
+LFGSwap EthereumPoW
+LNS
+LUSD ChickenBonds
+Layer2 Finance
+Lemma
+LendFlare
+LendHub
+Lenen
+LeonicornSwap
+LiNEAR Protocol
+Libre Swap
+Lif3 Swap
+Lifinity V1
+Lightning Network
+Lion Commerce
+Liqee
+Liquid Bolt
+Liquid Finance
+LiquidSwap
+Litecoin
+Lixir Finance
+Lizard
+Llama Airforce
+Llamalend
+Lockless Protocol
+Lofty
+Logium
+LooksRare
+Loopring
+LootSwap
+LuckyChip
+LumenSwap
+Luminous Finance
+Lunagens
+Lydia
+Lyra V1
+Lyra V2
+MCDEX
+METF Finance
+MFinance
+MIND Games
+MM Finance Cronos
+MM Finance Polygon
+MM Stableswap
+MM Stableswap Polygon
+MOBOX
+Madmex
+Magic Land
+MagicFox Swap
+Magik Finance AlgoStable
+MahaLend
+Maia V3
+Maker RWA
+MakerDAO
+MakiSwap
+Manhattan
+Maple
+MarginSwap
+Marinade Liquid Staking
+Market
+Mars Poolin
+Mars Protocol
+MaskEX
+MatrixDock
+Matter Defi
+Mean Finance
+Megaton Finance
+Meme Dollar
+Mento
+MeowSwapFi
+Meridian Trade
+Merit Circle
+Merlin
+Mero
+Mesher
+Meshswap
+Meta Pool Near
+MetaTdex
+MetalX Swap
+Metavault Binary Options
+Metavault DAO
+Metavault.Trade
+Meteora pools
+Metropolis
+MiaSwap
+Mimas Finance
+MiniSwap
+Minswap
+Mirror
+MistSwap
+Mobius Finance
+MochiFi
+MochiSwap
+MojitoSwap
+Mole
+MoneyOnChain
+Monolith
+Monster
+Moola Market
+Moon Swap
+Moonbeam
+MooniSwap
+Moonswap
+Moonwell
+Moonwell Apollo
+Moremoney
+Moret
+Morpheus Swap
+Morphex V1
+Morpho Aave
+Morpho Compound
+Mosquitos Finance
+MugenFinance
+Mummy Finance
+Mycelium Perpetual Swaps
+NAOS Finance
+NBX
+NEX
+NF3 APE
+NFT20
+NFTX
+Narwhalswap
+Nearpad
+Neku
+NeoBurger
+Neptune Mutual
+Nereus Finance
+Nest Protocol Staking
+NestFi
+Neuronswap
+Neutra Finance
+NewDex
+Newland
+Newswap
+Nexo
+Nexus Mutual
+Nightmare Finance
+NiiFi
+Niob Finance
+Nomiswap
+Nord Finance
+Notional V2
+O2 DAO
+O3 Swap
+OKC Liquid Staking
+OKCSwap
+OKX
+OPX Finance
+OasisSwap
+OccamX
+OctoPow Finance
+Oddz
+Oh Finance
+Oin Finance
+Olive Cash
+OlympulseX
+OmniDex Perpetuals
+OmniDex Swap
+OnX Finance
+One Cash
+One Dex
+Ooki
+OolongSwap
+OortSwap
+OpenOcean
+OpenSky Finance
+Opium
+OptiNyan
+Optimism Bridge
+Opulous
+Opyn Gamma
+OraiChain
+OraiDEX
+OrbitalSwap
+Orcus Finance
+OrderNChaos
+Orderly Network
+OreoSwap
+Origin Dollar
+Orion Money
+Orion Pools
+Osmosis DEX
+Ottopia
+Outcome Finance
+Overnight USD+
+Oxygen
+PERI Finance
+Pacoca
+PadSwap
+Paint Swap
+Pala
+Paladin Vote
+Panda Chef
+PandaSwap
+Pando Leaf
+Pangolin
+PantherSwap
+ParaSpace APE Staking V1
+Parallel Polkadot AMM
+Parallel Polkadot Crowdloan
+Parallel Polkadot Lending
+Parallel Polkadot Liquid Staking
+Parallel Protocol
+Paraluni Dex
+Parasset
+Parcl V2
+Paribus
+Parrot Protocol
+PartySwap
+PegaSys V2
+Penguin
+Penguin Finance
+PepeTeam sWAVES
+Percent Finance
+Perion
+Perpetual Protocol
+Phemex
+Phoenix Bonds
+Phoenix DEX
+Phoenix Finance
+PhotonSwap Finance
+Pickle
+PieDAO
+Piggybank DAO
+Pika
+Pilot Protocol
+PinkPea Finance
+PinkSale
+PinkSwap
+Pippi
+Pirex
+Planet Farm
+Platypus Finance
+Plenty
+PlutusDAO
+Pods Finance
+Pods Yield
+Polaris Finance
+PolkaEx
+Polkamarkets
+Polkastarter
+Polkaswap
+Polly Finance
+PolyCub
+PolyDEX-Cryption Network
+PolyQuity
+Polycat
+Polycat Dex
+Polydex
+PolygonFarm Finance
+Polymarket
+Polynomial Earn
+Polywhale Finance
+PonytaSwap
+PoolTogether V3
+PoolTogether V5
+Popsicle Finance
+Port Finance
+Position Exchange
+Potluck Protocol
+PowerPool
+Powerbomb Finance
+Predy V2
+Predy V3
+Primal
+Primitive
+Proof of Humanity
+Proteo Defi
+ProtoFi
+Proxy
+PureSwap
+Puzzle Swap
+Pylon Protocol
+QiDao
+Quarry
+Quickswap Dex
+Quickswap Lend
+QuipuSwap V1
+QuipuSwap V3
+REX Staking
+RFOX
+Rabbit Finance
+Radial
+Radiant V1
+Rage Trade v1 (Deprecated)
+Ramp
+Rari Capital
+Rarify
+Ratio Finance
+Raven
+RealT RMM Marketplace
+RealT Tokens
+Reaper Farm
+Redemption
+RelayChain
+RenVM
+Retreeb
+Revault
+Reverse
+Revert Compoundor
+Revest Finance
+Revuto
+Rift Finance
+Rikkei Finance
+RingFi
+Risk Harbor
+Robo-Vault
+RocketSwap
+Roe Finance
+Roketo
+Rose
+RskSwap
+Rubicon
+Ruby.Exchange Stable
+STON.fi
+STRX Finance
+SUNSwap V1
+SWAPP
+Saber
+Saddle Finance
+SafeSwap
+Saffron Finance
+SaitaSwap
+SandClock
+Saros
+SashimiSwap
+Savanna Finance
+Scarab Finance
+ScarySwap
+Scion Finance
+Scream
+SeaDex
+SecureDAO
+Seedify
+SenpaiSwap
+Sentre
+Set Protocol
+ShapeShift
+SharkSwap
+SheepDex
+Sheesha Finance
+Shell Protocol
+Sherlock
+Sherpa Cash
+Shiba Fantom
+ShibaSwap
+Shibance
+Shibex
+Shield
+Shinobi
+SiO2 Finance
+SideShift
+Sierra
+Sigmausd
+Single Finance
+SingularityDAO
+Siren
+Sirius Finance
+SkullSwap V2
+SkullSwap V3
+Skydrome
+SmartDEX
+SmartPad
+Smoothy
+SnowSwap AMM
+Solace
+Solana Farm
+Solarbeam
+Solarflare
+Solend
+SolidLizard Dex
+SolidPulse
+Solidex
+Solidly
+Solidly V2
+Solo Top
+Solrise Finance
+Solv V2
+Solyard
+Sonne Finance
+SoulSwap
+Soy Finance
+Spartacus
+Spartacus Exchange
+Spectrum Finance
+Spectrum Protocol
+Sperax Demeter
+Sperax USD
+Spice Trade
+Spicy DAO
+SpicySwap
+Spin Spot
+Spirit Farm
+SpiritSwap Lending
+SpookySwap
+Spool V1
+SportBet
+Stabilize
+StableKoi
+Stablz
+Stacker Ventures
+Stader
+StakeEasy
+StakeSteak
+Stakerz
+Stand Cash
+Standard Protocol Mode
+Standard Protocol Shiden
+StarCrazy
+StarSwap
+Starfish Finance
+Stargate
+Starlay Finance
+SteakBank Finance
+SteakHut
+Stella
+StellaSwap V2
+Step Exchange
+Sterling Finance
+Steroids
+Strike
+Strudel Finance
+Sturdy V1
+Sudoswap V1
+Summer.fi
+SundaeSwap
+Sunny
+Sunrise Gaming
+Superfluid
+Surfswap Classic
+Surfswap Stable AMM
+Sushi Aptos
+Sushi BentoBox
+Sushi Kashi
+SushiSwap
+Suterusu
+Swaap V1
+Swamp Finance
+SwapFish
+Swapr V2
+Swapscanner Dex
+Swapsicle V1
+Swarm Markets
+Swerve
+Swim Protocol
+Swivel Finance
+Symbiosis
+Symmetric
+Symmetry
+SynFutures V1
+Synthetix
+Synthetix V3
+THENA V1
+TTswap
+Taiga Acala
+Taiga Karura
+TangoSwap
+Tarina
+Team Finance
+Tectonic
+Tegro Finance
+Telcoin
+Telos Swap
+TempleDAO Trade
+Tender Finance
+Tenderize V1
+Tetu Swap
+Tezos Liquidity Baking
+The Open DAO SOS
+The Sandbox
+ThetaCash
+Thetanuts Finance
+Thoreum Finance
+Thorstarter
+TiFi
+Tidal Finance
+Timeswap V1
+Tinyman
+Tokemak
+TokensFarm
+Tomb
+Tomb Swap
+TopShelf
+Toros
+Toucan Protocol
+Trader Joe DEX
+Trader Joe Lend
+Tranche Finance
+Tranchess Ether
+Tranchess Yield
+Tranquil Finance
+Trava Finance
+Treasure
+Trisolaris
+TrueFi
+TrustSwap
+Tulip
+Twindex
+UNCX Network V2
+USDFI Lending
+USK
+Ubeswap
+Ubiquity DAO
+Umami Finance
+Umbrella Network
+Umee
+Unbound
+Undead Finance
+UniFarm
+UniFi
+UniTrade
+Unilend V1
+Unilend V2
+Union Protocol
+Uniswap V1
+Uniswap V2
+Uniswap V3
+Unit Protocol
+Universe XYZ
+Uniwhale
+Unknown
+Unlockd
+UnoRe
+UwU Lend
+VAX
+VVS Flawless
+VVS Standard
+Valas Finance
+Value Liquid
+ValueDefi
+VanSwap
+Vanilla
+VaporDex V1
+Varen
+VeRocket
+Vector Finance
+Vega Protocol
+Vela Exchange
+Velhalla
+Velocimeter V1
+Velodrome V1
+Venus Core Pool
+Vesper
+Vesq
+Vesta Finance
+Vexchange
+Vidya
+Vigor
+ViperSwap
+ViteX
+Viva
+Volmex
+VoltSwap
+VoltSwap V2
+Vortex DAO
+Vortex Protocol
+Vovo Finance
+VyFinance Vaults
+W3swap
+WBTC
+WEMIX Full Range Deposit
+WOO X
+WOOFi Earn
+WOWswap
+WagyuSwap
+Waka Finance
+Wan Bridge
+WanLend
+WanSwap Dex
+WannaSwap
+WardenSwap
+Warp Protocol
+Wasabix
+Waterfall DeFi
+Waterfall WTF
+Wault
+Wavelength DAO
+WePiggy
+Weld Finance
+Welnance
+WhaleEx
+White Whale Vaults
+Whiteheart
+WigoSwap
+Wing Finance
+WingRiders
+WingSwap
+Wombat Exchange
+WraithSwap
+Wrap Protocol
+Wrapped
+X Blue Finance
+XCarnival
+XSwap V2
+XUSD Money
+XY Finance
+Y2K V1
+Y2K V2
+Y2R
+YEL Finance
+YFDAI
+Yearn Ether
+Yearn Finance
+Yeti Finance
+YetiSwap
+Yield Guild Games
+Yield Protocol
+Yield Yak Aggregator
+Yield Yak Staked Avax
+YieldFields
+YieldWolf
+Yieldly
+Yodeswap
+YokaiSwap
+Yoshi Exchange
+YouSwap
+Youves
+YuzuSwap
+ZKFairSwap
+ZKSwap
+Zappy
+Zencha Finance
+Zeniq Swap
+Zenlink AMM
+Zeta
+ZilSwap
+Zinax DAO
+ZipSwap
+Zircon Gamma
+Zombie Network
+ZooCoin
+ZyberSwap Stableswap
+Zyberswap AMM
+aSOL
+anetaBTC
+basedmarkets
+cBridge
+cSwap
+cVault Finance
+casinocronos
+ctez
+dAMM Finance
+dHEDGE
+dYdX V3
+eckoDAO
+fees.wtf
+forlend
+gALGO Liquid Governance
+hBTC
+handle.fi hSP
+iTrust Finance
+iZiSwap
+mStable CDP
+marginfi Lending
+multiverse
+pNetwork
+stCELO
+stake.link index
+stake.link liquid
+tBTC
+veDAO
+xBacked
+xDAI Stake Bridge
+xExchange
+xSigma
+xToken
+yAxis
