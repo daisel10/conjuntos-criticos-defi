@@ -12,6 +12,9 @@
 \graphicspath{{figuras/}}
 \renewcommand{\IEEEkeywordsname}{Palabras clave}
 \addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\newtheorem{proposicion}{Proposición}
+\newtheorem{lema}{Lema}
+\newtheorem{corolario}{Corolario}
 
 \begin{document}
 
@@ -36,10 +39,18 @@ estudiar ese riesgo se escogen los protocolos más grandes. Este trabajo pregunt
 si hay una mejor forma de escogerlos: mirar cómo están conectados. Comparamos
 cuatro criterios estructurales (intermediación, articulación, conjunto dominante
 conectado e inmunización espectral) contra dos de tamaño (fuerza de exposición y
-PageRank) sobre datos reales de 2022 a 2024. Los criterios estructurales parten
-más la red, pero lo que separan son protocolos pequeños; los de tamaño quitan
-más exposición. Las dos visiones responden preguntas distintas. Publicamos la
-herramienta que hace el análisis.
+PageRank), y contra un control voraz, sobre 13 instantáneas de 2022 a 2024.
+La articulación adaptativa desconecta más protocolos en las 13 semanas, pero
+alrededor del 84\,\% de ese daño consiste en aislar hojas; el voraz retira más
+exposición en las 13. Ambos resultados son en buena parte circulares, porque
+cada regla optimiza la medida en la que gana. Con una medida que ninguna regla
+optimiza, la fragmentación relativa de la exposición superviviente, ninguna
+familia domina: en promedio, todas dejan más del 97\,\% de esa exposición en una sola
+componente. Probamos que la articulación es óptima para $k=1$, que existe un
+óptimo sin hojas y que la pérdida directa es submodular, lo que explica la
+ventaja del tamaño. Las conclusiones se mantienen sin los nodos que no son
+protocolos y sobre el 2-núcleo. La herramienta \texttt{critset} reproduce todas
+las cifras.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -249,7 +260,7 @@ Se reportan ambas medidas y se toma la ponderada como principal. Ésta mide
 concentración de exposición conectada, no pérdidas monetarias realizadas ni
 tamaño de una cascada; la estructural permite el contraste con la literatura
 de robustez de redes \cite{albert2000error}. Los porcentajes de concentración
-se calcularán indicando semana, población y denominador, sin equiparar una suma
+se reportan indicando semana, población y denominador, sin equiparar una suma
 de fuerzas de vértices con una suma de aristas.
 
 \subsection{Criterios de selección en competencia}
@@ -272,26 +283,21 @@ presupuesto $k$, criterios de selección procedentes de tradiciones distintas:
       ponderado del objetivo de reducir el radio espectral \cite{chen2016node}.
 \end{enumerate}
 
-Como controles adicionales se incluirán rankings por TVL y por una
-implementación declarada del SIS de DeXposure-FM \cite{shu2026dexposurefm},
-cuando se disponga de sus insumos contemporáneos. Comparar solo contra fuerza
-o PageRank no permite afirmar que se supera al TVL ni al SIS completo.
+Como controles adicionales se incluyeron un ranking por TVL y una
+implementación declarada del SIS de DeXposure-FM \cite{shu2026dexposurefm} en
+las semanas con insumos publicados, y un control voraz sin restricción
+(Sección~\ref{sec:reglas}). Comparar solo contra fuerza o PageRank no permite
+afirmar que se supera al TVL ni al SIS completo.
 
-\subsection{Motivación preliminar del contraste con tamaño}
-
-Una medición preliminar propia sobre las 174 instantáneas posteriores a enero de
-2021 motiva la pregunta. El cálculo exploratorio usó la componente gigante y
-pesos transformados con $\log(1+w)$, y debe distinguirse de la evaluación
-financiera con pesos crudos. Al regresar el logaritmo de cada invariante contra los
-logaritmos del número de vértices y de aristas se obtiene que la resistencia
-efectiva de grafo queda explicada por el tamaño con $R^2 = 1{,}000$ y el radio
-espectral con $R^2 = 0{,}987$; la conectividad algebraica, en cambio, solo con
-$R^2 = 0{,}455$. Estos ajustes describen asociación dentro de esa muestra;
-un $R^2$ alto, o redondeado a uno, no demuestra una identidad matemática ni
-ausencia de información adicional. Son resultados preliminares que deberán
-acompañarse de código, especificación de matrices y salida verificable antes
-de usarse como evidencia definitiva. Motivan comparar directamente los conjuntos
-de remoción, sin anticipar qué ranking será superior.
+PageRank se agrupa con la fuerza como criterio \emph{de tamaño}, y la
+agrupación necesita una justificación porque PageRank también depende de la
+estructura. En las 13 semanas analizadas, la correlación de Spearman entre
+PageRank y fuerza sobre todos los vértices de $C_t$ va de 0{,}44 a 0{,}63
+(mediana 0{,}56). Esta asociación es moderada, no una identidad: la
+clasificación es convencional. La seguimos porque PageRank es el componente de
+conectividad de un índice diseñado para medir importancia por tamaño
+\cite{shu2026dexposurefm} y porque, en los resultados, PageRank se comporta
+como la fuerza en ambas medidas.
 
 \subsection{Alcance y limitaciones asumidas}
 
@@ -321,16 +327,15 @@ resultaron afectados.
 Dos precisiones metodológicas, ambas obligadas por lo que muestran los datos. La
 primera es que la verdad de campo \textbf{no} puede ser la desaparición del
 protocolo del grafo: un protocolo puede seguir registrado después de sufrir
-una pérdida. Se usarán informes públicos para identificar afectados y la caída
-de fuerza de exposición como indicador complementario, sin equiparar cualquier
-caída de exposición con insolvencia. La ventana y el umbral se fijarán antes
-del cotejo. La
-segunda es que la lista de protocolos afectados se curará a mano a partir de
+una pérdida. El indicador usado es la caída de fuerza de exposición, sin
+equiparar cualquier caída de exposición con insolvencia. La ventana y el umbral
+quedaron fijados en el código antes del cotejo. La
+segunda es que la lista de protocolos afectados debe curarse a mano a partir de
 informes públicos posteriores a cada episodio, y no por coincidencia de cadenas
 de texto en el nombre: una búsqueda por patrón sobre los nombres devuelve falsos
 positivos evidentes como \emph{Nexus Mutual}, \emph{NFTX} o \emph{Solana
-Farm}. Esa lista no se alcanzó a armar; la Sección~\ref{sec:caso} usa solo
-la caída de exposición.
+Farm}. Esa lista no se armó en este trabajo y queda como trabajo futuro; la
+Sección~\ref{sec:caso} usa solo la caída de exposición.
 
 \section{Objetivos}
 
@@ -352,8 +357,9 @@ que emplea actualmente el estado del arte.
 
 \item \textbf{Caracterizar} cada instantánea mediante invariantes de conectividad
       --número de componentes, tamaño de la componente gigante, conectividad
-      algebraica, distribución de grados y concentración del peso de exposición--
-      y documentar su evolución entre 2018 y 2024.
+      algebraica, grado medio y máximo, proporción de hojas y concentración del
+      peso de exposición-- y documentar su evolución entre 2021 y 2024, período
+      en que la red tiene un tamaño comparable.
 
 \item \textbf{Implementar} los seis criterios de selección de vértices descritos
       en la Sección~II-E, incluyendo el algoritmo de aproximación de Guha y
@@ -373,14 +379,17 @@ que emplea actualmente el estado del arte.
 \item \textbf{Contrastar} los conjuntos críticos obtenidos sobre la instantánea
       previa a cada uno de los tres episodios documentados --Terra/Luna en mayo de
       2022, FTX en noviembre de 2022 y la pérdida de paridad de USDC en marzo de
-      2023-- contra los protocolos efectivamente afectados, tomando como verdad de
-      campo informes públicos y usando la caída de exposición como indicador
-      complementario, asumiendo el carácter
-      anecdótico de una validación con tres casos.
+      2023-- contra un indicador de afectación fijado de antemano, la caída de
+      la fuerza de exposición, asumiendo el carácter anecdótico de una
+      validación con tres casos.
 
-\item \textbf{Analizar} el costo computacional de cada algoritmo en función del
-      tamaño de la instancia y discutir su viabilidad para el monitoreo periódico
-      de una red de miles de vértices.
+\item \textbf{Medir} el tiempo y la memoria de cada algoritmo en las semanas
+      analizadas, relacionarlos con sus cotas teóricas y discutir su viabilidad
+      para el monitoreo periódico de una red de miles de vértices.
+
+\item \textbf{Demostrar} propiedades de las dos medidas de daño que expliquen
+      los resultados: reducción del espacio de búsqueda, optimalidad para
+      $k=1$ y submodularidad de la pérdida directa.
 
 \item \textbf{Desarrollar} una herramienta reproducible que reciba una
       instantánea del grafo y devuelva los conjuntos candidatos junto con las
@@ -411,7 +420,7 @@ evalúa un simulador de contagio; sus escenarios de estrés seleccionan el
 protocolo mayor, los cinco mayores o un sector \cite{shu2026dexposurefm}. Su
 índice de importancia sistémica combina PageRank, concentración de exposiciones
 salientes y una transformación normalizada del valor bloqueado. Esto distingue
-tres referencias: fuerza de exposición, TVL y SIS. El experimento conservará
+tres referencias: fuerza de exposición, TVL y SIS. El experimento conserva
 esa distinción al interpretar sus comparaciones.
 
 El valor total bloqueado (TVL) puede duplicar el conteo del mismo activo cuando
@@ -458,8 +467,14 @@ NetShield y NetShield+ para aproximar la selección de nodos que reduce el
 radio espectral. La regla de este proyecto adopta ese objetivo, pero lo aplica
 a una matriz dirigida y ponderada mediante evaluaciones voraces directas.
 Es una adaptación heurística propia, sin transferir las garantías de
-NetShield. El resultado de interés seguirá siendo la fragmentación y la
-exposición remanente, no el cambio espectral por sí solo.
+NetShield. El resultado de interés es la fragmentación y la exposición
+remanente, no el cambio espectral por sí solo.
+
+La literatura de \emph{desmantelamiento} de redes propone además heurísticas
+específicas para minimizar la componente gigante, como la influencia colectiva
+o la poda del 2-núcleo. Aquí no se implementaron; la articulación adaptativa
+cumple el papel de heurística estructural de referencia, y la comparación con
+esas familias queda como trabajo futuro.
 
 Macchiati \emph{et al.} \cite{macchiati2024spectral} comparan el radio
 espectral observado con su expectativa bajo modelos nulos de máxima entropía
@@ -554,11 +569,166 @@ exposición destruida: representa dispersión entre componentes. La identidad
 coincide exactamente con la pérdida ponderada de \eqref{eq:retencion}, sin
 cambiar de componente de referencia entre la métrica y su descomposición.
 
+\subsection{Una medida que ninguna regla optimiza}
+
+Las dos pérdidas anteriores favorecen, por construcción, a alguna de las reglas.
+La articulación escoge en cada paso el vértice que minimiza $R_{\mathrm{est}}$;
+el voraz y la etapa final del CDS escogen el que maximiza $L_{\mathrm{pond}}$, y
+la fuerza ordena por la cantidad que, para $k=1$, \emph{es}
+$L_{\mathrm{directa}}$ (Proposición~\ref{prop:submod}). Para que el contraste
+no sea circular se agrega la \emph{fragmentación relativa}
+\begin{equation}
+F_{\mathrm{rel}}(S)=1-\frac{W_\star}{W_{-S}}
+=\frac{L_{\mathrm{frag}}}{1-L_{\mathrm{directa}}},
+\label{eq:frel}
+\end{equation}
+la fracción de la exposición \emph{superviviente} que queda fuera de la
+componente con mayor exposición. Quitar un protocolo grande sin partir nada deja
+$F_{\mathrm{rel}}=0$; la medida solo crece si lo que sobrevive queda repartido.
+Ninguna de las reglas usa $F_{\mathrm{rel}}$ para decidir.
+
+Del mismo modo, la pérdida estructural se separa según el tamaño de lo que
+se desprende. Si $n_1$ es el número de fragmentos de un solo vértice distintos
+de la componente mayor y $n_{\geq2}$ el número de vértices en fragmentos de dos o
+más,
+\begin{equation}
+L_{\mathrm{est}}
+=\underbrace{\frac{k}{|C_t|}}_{\text{quitados}}
++\underbrace{\frac{n_1}{|C_t|}}_{L_{\mathrm{single}}}
++\underbrace{\frac{n_{\geq2}}{|C_t|}}_{L_{\mathrm{multi}}}.
+\label{eq:lest-desc}
+\end{equation}
+$L_{\mathrm{single}}$ cuenta sobre todo hojas aisladas al quitar su único
+vecino, un daño trivial; $L_{\mathrm{multi}}$ es la parte no trivial.
+
+\subsection{Propiedades de las medidas}
+\label{sec:teoria}
+
+Esta sección reúne resultados con prueba que acotan el problema
+\eqref{eq:optimo} y explican los resultados empíricos. Sea $H=H_t$ con
+$n=|C_t|\geq3$ vértices, $\ell(H)$ el conjunto de sus hojas y $D_j$ como en
+\eqref{eq:medidas}.
+
+\begin{lema}[de las hojas]\label{lem:hojas}
+Sea $1\leq k\leq n-|\ell(H)|$. Para $j\in\{\mathrm{est},\mathrm{pond}\}$ existe
+un conjunto óptimo $S^\ast_{k,j}$ sin hojas.
+\end{lema}
+
+\begin{IEEEproof}[Prueba]
+Sea $S$ óptimo con una hoja $x\in S$ cuyo único vecino es $v$. Si $v\notin S$,
+sea $S'=S-x+v$; si $v\in S$, sea $S'=S-x+u$ con $u\notin S$ un vértice que no
+es hoja, que existe porque $S$ contiene a lo sumo $k-1$ vértices que no son
+hoja y $k\leq n-|\ell(H)|$. En ambos casos, $H-S'$ se obtiene de $H-S$
+quitando un vértice y devolviendo $x$, cuyo único vecino está en $S'$. Quitar
+un vértice solo parte componentes, y $x$ vuelve como componente aislada.
+Toda componente de $H-S'$ es entonces $\{x\}$ o está contenida en una componente
+de $H-S$. Como los pesos son positivos, $W_t(Q')\leq W_t(Q)$ si $Q'\subseteq Q$
+y $W_t(\{x\})=0$; luego $D_j(H-S')\leq D_j(H-S)$ (para $j=\mathrm{est}$ se usa
+que $H-S$ tiene alguna componente de al menos un vértice). $S'$ también es
+óptimo y tiene una hoja menos. Se repite hasta eliminar todas las hojas.
+\end{IEEEproof}
+
+En las 13 semanas, entre el 37 y el 45\,\% de $C_t$ son hojas y $k\leq20$
+cumple la hipótesis con holgura. El lema reduce el espacio de búsqueda exacta
+en esa proporción y muestra que la ventaja de una regla no puede venir de
+incluir hojas en $S$, sino de aislarlas al quitar a sus vecinos.
+
+\begin{proposicion}\label{prop:art}
+Para $k=1$, la articulación adaptativa resuelve \eqref{eq:optimo} exactamente
+para $j=\mathrm{est}$.
+\end{proposicion}
+
+\begin{IEEEproof}[Prueba]
+Si $x$ no es punto de articulación, $H-x$ es conexo y $D_{\mathrm{est}}(H-x)=n-1$.
+Si $a$ es punto de articulación, $H-a$ tiene al menos dos componentes con $n-1$
+vértices en total, así que su componente mayor tiene a lo sumo $n-2$ vértices.
+Si existen puntos de articulación, el óptimo está entre ellos, y la regla
+escoge justamente el que minimiza la componente mayor residual. Si no existen,
+todo vértice da $n-1$ y cualquier elección, incluida la de la regla, es
+óptima.
+\end{IEEEproof}
+
+Para $k\geq2$ la regla es voraz y no tiene garantía; el óptimo exacto para
+$k\geq2$ queda como trabajo futuro, con el Lema~\ref{lem:hojas} y los modelos
+enteros de \cite{shen2012interdiction} como punto de partida.
+
+\begin{proposicion}\label{prop:submod}
+$L_{\mathrm{directa}}$ es monótona y submodular. En consecuencia, elegir en cada
+paso el vértice de mayor ganancia marginal en $L_{\mathrm{directa}}$ alcanza al
+menos $(1-1/e)\max_{|S|=k}L_{\mathrm{directa}}(S)$, y para $k=1$ el óptimo es el
+vértice de mayor fuerza.
+\end{proposicion}
+
+\begin{IEEEproof}[Prueba]
+Por \eqref{eq:descomposicion},
+$L_{\mathrm{directa}}(S)=W_0^{-1}\sum_{(u,v)\in E_t[C_t]}w_t(u,v)\,
+\mathbf 1[u\in S\ \text{o}\ v\in S]$: una arista cuenta si $S$ cubre alguno de
+sus extremos. Es una función de cobertura ponderada con pesos no negativos, que
+es monótona y submodular; la garantía $(1-1/e)$ del voraz para maximizar una
+función así con restricción de cardinalidad es la de Nemhauser, Wolsey y Fisher
+\cite{nemhauser1978analysis}. Para $S=\{u\}$, las aristas cubiertas son las
+incidentes a $u$ (no hay bucles), y $L_{\mathrm{directa}}(\{u\})=s_t(u)/W_0$.
+\end{IEEEproof}
+
+Como $L_{\mathrm{pond}}=L_{\mathrm{directa}}+L_{\mathrm{frag}}$ y, en todos los
+conjuntos evaluados, $L_{\mathrm{frag}}\leq0{,}009$ (Sección~\ref{sec:resultados}),
+maximizar $L_{\mathrm{pond}}$ es en la práctica maximizar una cobertura de aristas
+ponderada, problema para el que el voraz es casi óptimo y la fuerza es su
+versión estática. Esto explica la ventaja del tamaño en exposición. La
+explicación es empírica en un punto: la cota sobre $L_{\mathrm{frag}}$ se observó
+en los conjuntos evaluados, no se demostró para todo $S$.
+
+\begin{proposicion}[atajo espectral]\label{prop:espectral}
+Sea $A\geq0$ la matriz de exposición, sean $Q_1,\dots,Q_r$ sus componentes
+fuertemente conexas y $\rho^\ast=\rho(A)$. Entonces
+$\rho(A)=\max_i\rho(A[Q_i])$. Sea $M$ el conjunto de las componentes con
+$\rho(A[Q_i])=\rho^\ast$. Si $|M|\geq2$, ninguna remoción de un solo vértice
+reduce $\rho$. Si $M=\{Q^\ast\}$, solo los vértices de $Q^\ast$ pueden reducirlo.
+\end{proposicion}
+
+\begin{IEEEproof}[Prueba]
+Ordenando los vértices según un orden topológico de las componentes, $A$ queda
+triangular superior por bloques con bloques diagonales $A[Q_i]$ (forma normal de
+Frobenius). Su polinomio característico es el producto de los de los bloques,
+así que $\rho(A)=\max_i\rho(A[Q_i])$. Al quitar $x$, las componentes que no
+contienen a $x$ siguen siendo componentes de $A-x$ con el mismo bloque, y la
+que contiene a $x$ se parte en componentes cuyos bloques son submatrices
+principales de $A[Q_i]$, de radio no mayor porque $A\geq0$. Si $|M|\geq2$,
+alguna componente de $M$ no contiene a $x$ y conserva $\rho^\ast$. Si
+$M=\{Q^\ast\}$ y $x\notin Q^\ast$, $Q^\ast$ queda intacta.
+\end{IEEEproof}
+
+La implementación usa este resultado: en el caso de $M$ único solo evalúa los
+vértices de $Q^\ast$, y en el caso de empate registra caída nula para todos y
+desempata por índice.
+
+\begin{proposicion}\label{prop:tarjan}
+En un grafo conexo con $n$ vértices y $m$ aristas, un solo recorrido en
+profundidad da, para todo punto de articulación $a$, el tamaño de la
+componente mayor de $H-a$, en tiempo $O(n+m)$.
+\end{proposicion}
+
+\begin{IEEEproof}[Prueba]
+En el árbol del recorrido \cite{tarjan1972depth}, con tiempos de
+descubrimiento $d(\cdot)$ y valores $\mathrm{low}(\cdot)$, un hijo $c$ de $a$
+cuyo subárbol cumple $\mathrm{low}(c)\geq d(a)$ queda separado al quitar $a$,
+y su pieza es exactamente ese subárbol, de tamaño $t(c)$. Los demás hijos
+siguen unidos al resto por una arista de retroceso. Si $a$ no es la raíz, la
+pieza que contiene al padre tiene $n-1-\sum_c t(c)$ vértices, sumando sobre
+los hijos separados. Si $a$ es la raíz, las piezas son los subárboles de sus
+hijos. Los tamaños de subárbol y los valores $\mathrm{low}$ se acumulan en el
+mismo recorrido.
+\end{IEEEproof}
+
+Así, cada paso de la regla de articulación cuesta $O(n+m)$ y no
+$O(n(n+m))$, como costaría probar cada punto de articulación por separado.
+
 \section{Solución propuesta}
 
 \subsection{Seis reglas de selección}
+\label{sec:reglas}
 
-Se compararán seis reglas, todas aplicadas a la \emph{misma} instantánea y al
+Se compararon seis reglas, todas aplicadas a la \emph{misma} instantánea y al
 mismo presupuesto $k$. Cada regla devuelve una secuencia ordenada de vértices;
 el conjunto evaluado es su prefijo de longitud $k$. El universo elegible es
 siempre $C_t$. Los empates se resuelven por orden lexicográfico de identificadores,
@@ -608,9 +778,10 @@ calculan una vez; las reglas adaptativas construyen la secuencia paso a paso.
       Para obtener una secuencia de ataque,
       elegir vorazmente dentro de $B_t$ el vértice que maximice la pérdida
       ponderada marginal de \eqref{eq:retencion}; si $|B_t|<k$, completar con
-      vértices de $C_t\setminus B_t$ bajo la misma regla. La construcción de A3
-      queda como extensión futura, pendiente de cotejar su especificación
-      completa; no es una implementación comprometida en esta comparación. La
+      vértices de $C_t\setminus B_t$ bajo la misma regla. En las 13 semanas,
+      $|B_t|$ va de 73 a 170 vértices, entre el 6 y el 9\,\% de $C_t$: la
+      restricción sí reduce el universo, pero deja mucho más que $k$
+      candidatos. La
       garantía de aproximación del CDS no implica una garantía sobre esta
       selección voraz ni sobre el daño final.
 
@@ -621,28 +792,29 @@ calculan una vez; las reglas adaptativas construyen la secuencia paso a paso.
       \cite{chen2016node}, no una implementación de NetShield. Para comprimir
       la escala de pesos se usa $A^{\log}_{uv}=\log(1+w_t(u,v)/w_{\mathrm{ref}})$,
       con $w_{\mathrm{ref}}=1$ USD, \emph{solo para el
-      ranking}; la evaluación financiera siempre emplea $w_t$ crudo. Se
-      informará como sensibilidad si usar pesos crudos cambia el conjunto.
+      ranking}; la evaluación financiera siempre emplea $w_t$ crudo. En las
+      tres semanas previas a los episodios se repitió la regla con pesos
+      crudos como sensibilidad (Sección~\ref{sec:sensibilidad}).
       Se toma el máximo módulo de los autovalores, conservando la dirección.
 \end{enumerate}
 
 La regla CDS usa el valor de la función objetivo para escoger \emph{dentro}
 de su conjunto candidato, mientras que varias reglas anteriores son rankings
-directos. Por transparencia se calculará también, donde el costo lo permita,
-un control voraz sin restricción de CDS que maximiza la misma pérdida marginal.
-Ese control permite distinguir el mérito de la columna vertebral del mérito de
-usar una evaluación voraz. Se aplica sobre $C_t\setminus S$ y usa la misma
+directos. Por eso se calculó también, en todas las semanas, un control voraz
+sin restricción de CDS que maximiza la misma pérdida marginal. Ese control
+distingue el mérito de la columna vertebral del mérito de usar una evaluación
+voraz, y se reporta en todas las tablas junto a las seis reglas. Se aplica sobre $C_t\setminus S$ y usa la misma
 $L_{\mathrm{pond}}$ y desempates. Los conjuntos obtenidos se denotan $S_{a,k}$;
 ninguno se identifica con el óptimo $S^{\ast}_{k,j}$ sin una verificación exacta.
 
 \subsection{Controles por TVL y SIS}
 
-El ranking por TVL ordenará el valor contemporáneo de cada protocolo de $C_t$.
-Se obtendrá de una fuente versionada compatible con el panel; no se reconstruirá
-sumando fuerzas ni se imputarán valores con información posterior. TVL actúa
+El ranking por TVL ordena el valor contemporáneo de cada protocolo de $C_t$,
+tomado de los archivos de nodos publicados con DeXposure; no se reconstruye
+sumando fuerzas ni se imputan valores con información posterior. TVL actúa
 solo como criterio de selección, no como peso de evaluación financiera.
 
-Para el SIS se declarará la siguiente implementación de la fórmula publicada
+Para el SIS se usa la siguiente implementación de la fórmula publicada
 en \cite{shu2026dexposurefm}:
 \begin{equation}
 \mathrm{SIS}(u)=\tfrac13\bigl[\widehat{\mathrm{PR}}(u)
@@ -657,11 +829,11 @@ declaran estas convenciones porque la fórmula de referencia no fija todos los
 detalles de normalización; el control no se presenta como réplica exacta de
 su código ni de su simulador de contagio.
 
-TVL y SIS se compararán únicamente en semanas con insumos completos para todo
-$C_t$, manteniendo el mismo universo que los seis métodos principales. Si no
-hay datos compatibles, se documentará la exclusión y las conclusiones de esas
-semanas se limitarán al contraste contra fuerza de exposición y PageRank.
-La superioridad frente a TVL o SIS requiere una comparación emparejada efectiva.
+El plan era comparar TVL y SIS solo en semanas con insumos completos para todo
+$C_t$. Ninguna semana los tiene: el TVL publicado cubre cuatro semanas y en
+ellas falta para el 13 al 22\,\% de $C_t$. Por eso ambos controles se reportan
+como exploratorios, con los faltantes en cero, y las conclusiones principales
+se limitan al contraste contra fuerza y PageRank.
 
 \subsection{Protocolo experimental}
 
@@ -670,69 +842,76 @@ su proyección según \eqref{eq:proyeccion}; (ii) localizar $C_t$ y calcular los
 seis secuencias y los controles disponibles; (iii) para $k\in\{1,2,5,10,20\}$,
 con $k<|C_t|$, eliminar simultáneamente
 el prefijo de cada ranking; (iv) recomputar componentes y exposiciones, y
-registrar \eqref{eq:retencion} y \eqref{eq:descomposicion}; (v) medir tiempo
-y memoria. En reglas adaptativas, la selección es secuencial; el conjunto final
-se evalúa sobre una copia intacta de la instantánea original. No se simula
-propagación entre pasos. Los presupuestos se fijan antes de observar resultados.
-Se informará además $k/|C_t|$ para interpretar su escala relativa.
+registrar \eqref{eq:retencion}, \eqref{eq:descomposicion}, \eqref{eq:frel} y
+\eqref{eq:lest-desc}; (v) medir tiempo y memoria pico. En reglas adaptativas,
+la selección es secuencial; el conjunto final se evalúa sobre una copia intacta
+de la instantánea original. No se simula propagación entre pasos. Los
+presupuestos se fijaron antes de observar resultados. Con $k=10$,
+$k/|C_t|$ va de 0{,}35 a 0{,}95\,\% (media 0{,}6\,\%). La línea base aleatoria
+es la media de 20 permutaciones uniformes de $C_t$, con semillas 0 a 19.
 
-La comparación principal se hará en instantáneas maduras de 2022--2024:
+La comparación principal se hizo en instantáneas maduras de 2022--2024:
 la primera semana disponible de cada trimestre calendario y la última
-instantánea anterior a Terra/Luna, FTX y USDC. Antes de ejecutar se registrarán
-las fechas de inicio de cada episodio con sus fuentes públicas y se eliminarán
-semanas duplicadas entre ambos criterios de muestreo. Esta regla evita
-escoger semanas por el resultado del ataque. Se usará el mismo grafo, el mismo
-$k$ y el mismo denominador de \eqref{eq:retencion} para todas las reglas de
-cada semana. Se compararán las curvas completas, la pérdida para cada $k$,
-el solapamiento de los conjuntos seleccionados mediante Jaccard,
+instantánea anterior a Terra/Luna, FTX y USDC. Las fechas de inicio quedaron
+fijadas en el código antes de ejecutar: 9 de mayo de 2022 (Terra/Luna) y 7 de
+noviembre de 2022 (FTX), las del estudio de eventos de DeXposure-FM
+\cite{shu2026dexposurefm}, y 11 de marzo de 2023 (pérdida de paridad de USDC).
+Las semanas duplicadas entre ambos criterios se eliminaron, lo que deja 13
+semanas. Esta regla evita escoger semanas por el resultado del ataque. Todas las
+reglas de una semana usan el mismo grafo, el mismo $k$ y el mismo denominador
+de \eqref{eq:retencion}. Se comparan las curvas completas, la pérdida para cada
+$k$, el solapamiento de los conjuntos mediante Jaccard,
 $|S_{a,k}\cap S_{b,k}|/|S_{a,k}\cup S_{b,k}|$, y el costo computacional.
-Una victoria estructural exige reducir las retenciones \emph{después} de
-mostrar cuánto de la ventaja procede de $L_{\mathrm{frag}}$ y cuánto de
-$L_{\mathrm{directa}}$.
 
-No se fabricará un \emph{ensemble} de grafos sintéticos para esta entrega.
-Ésta es una \emph{elección metodológica provisional}, no una decisión cerrada
-del proyecto: el contraste principal es intra-instantánea y no necesita el
-ensemble con el que Koç \emph{et al.} correlacionan topologías diferentes
-\cite{koc2014topological}. Si se resumen resultados a través del tiempo,
-se informarán la autocorrelación y un tamaño muestral efectivo aproximado
-$n_{\mathrm{ef}}=n(1-\rho_1)/(1+\rho_1)$, como diagnóstico bajo una
-aproximación AR(1), no como corrección universal ni sustituto de un contraste
-que preserve dependencia temporal. Se estimará sobre series semanales regulares,
-no sobre la muestra irregular de trimestres y eventos. El diagnóstico previo
-de $\mathrm{ncomp}/N$ dio $\rho_1\simeq0{,}915$ y $n_{\mathrm{ef}}\simeq7{,}7$
-para 174 semanas; ese valor es específico de esa serie y no se traslada a las
-curvas de ataque. Por ello no se propondrá una prueba de
-alerta temprana como resultado central. Un modelo nulo de máxima entropía
-\cite{macchiati2024spectral} quedaría para una pregunta espectral distinta y
-requiere verificar su aproximación en el rango de reciprocidad del panel.
+\paragraph{Cómo se declara un ganador} Para cada medida y cada semana, una
+regla \emph{gana estrictamente} si alcanza el máximo de la semana y \emph{gana
+con tolerancia} si queda a menos de $0{,}01$ de ese máximo; con tolerancia,
+varias reglas pueden ganar la misma semana. Las diferencias entre la regla de
+mayor promedio y cada otra se reportan como diferencias pareadas por semana con
+un intervalo bootstrap percentil del 95\,\% (5\,000 remuestreos de semanas,
+semilla 0). Con 13 semanas correlacionadas en el tiempo, el intervalo es
+descriptivo, no una prueba formal.
+
+No se generó un \emph{ensemble} de grafos sintéticos para el contraste entre
+reglas: ese contraste es intra-instantánea y no necesita el ensemble con el
+que Koç \emph{et al.} correlacionan topologías diferentes
+\cite{koc2014topological}. Otra pregunta sí lo necesita: si el patrón
+``estructura gana en vértices, tamaño gana en exposición'' aparece igual en un
+grafo recableado con la misma secuencia de grados o de fuerzas. Ese modelo nulo
+no se implementó y queda como la principal extensión pendiente. Para las series
+semanales de la caracterización se reporta la autocorrelación de orden uno y
+el tamaño muestral efectivo $n_{\mathrm{ef}}=n(1-\rho_1)/(1+\rho_1)$, como
+diagnóstico bajo una aproximación AR(1). Sobre las 174 semanas desde 2021,
+$\mathrm{ncomp}/|V_t|$ da $\rho_1=0{,}57$ y $n_{\mathrm{ef}}\approx47$, y
+$\lambda_2$ da $\rho_1=0{,}55$ y $n_{\mathrm{ef}}\approx51$. No se propone
+una prueba de alerta temprana. Un modelo nulo de máxima entropía
+\cite{macchiati2024spectral} corresponde a una pregunta espectral distinta.
 
 \subsection{Validación, alcance y reproducibilidad}
 
 Las instantáneas previas a Terra/Luna, FTX y USDC permiten estudios de caso:
-se contrastarán los protocolos seleccionados con listas de afectados curadas
-a partir de fuentes públicas y con caídas de fuerza de exposición durante la
-ventana del evento. Se declararán la ventana y el umbral antes del cotejo.
-La desaparición del nombre del protocolo en el CSV no servirá como verdad de
-campo, porque los protocolos afectados pueden seguir presentes. Tres eventos
-no permiten atribuir poder predictivo general ni causalidad a un ranking.
+se contrastan los protocolos seleccionados con las caídas de fuerza de
+exposición durante la ventana del evento. La ventana (cuatro semanas) y el
+umbral (caída de al menos el 50\,\%) quedaron fijados antes del cotejo. La
+desaparición del nombre del protocolo en el CSV no sirve como verdad de campo,
+porque los protocolos afectados pueden seguir presentes. Tres eventos no
+permiten atribuir poder predictivo general ni causalidad a un ranking.
 
-La herramienta de la entrega final recibirá una instantánea en el esquema del
-panel, validará pesos y dirección, y devolverá identificadores seleccionados,
-curvas normalizadas, la descomposición del daño y tiempos de ejecución. La
+La herramienta recibe una instantánea en el esquema del panel, valida pesos y
+dirección, y devuelve identificadores seleccionados, curvas normalizadas, la
+descomposición del daño y tiempos de ejecución. La
 intermediación exacta sin pesos cuesta $O(nm)$ con recorridos desde cada vértice;
 articulaciones y componentes cuestan $O(n+m)$ por cálculo. La regla adaptativa
 añade la evaluación de candidatos: no se atribuye costo lineal a toda la
 secuencia. La regla espectral exacta requiere hasta $\sum_{i=0}^{k-1}(n-i)$
-problemas de autovalores; se medirá su viabilidad antes de extenderla al panel.
+problemas de autovalores, reducidos en la práctica por la
+Proposición~\ref{prop:espectral}.
 
-Para matrices pequeñas se usará una descomposición densa; para las grandes,
-Arnoldi disperso con inicialización fija y comprobación de residuo relativo
-menor que $10^{-8}$. Los radios se compararán con tolerancia relativa $10^{-8}$
-y absoluta $10^{-10}$. Si el solver no converge o esa precisión no permite
-resolver el orden, se recurrirá a la vía densa; si tampoco es viable, se
-registrará el fallo y se excluirá esa comparación. Se archivarán versiones,
-parámetros y residuos numéricos. La exposición inferida, la resolución
+Para matrices de hasta 600 vértices se usa una descomposición densa; para las
+mayores, Arnoldi disperso con inicialización fija y comprobación de residuo
+relativo menor que $10^{-8}$, con la vía densa como respaldo si no converge.
+Los radios se comparan con tolerancia relativa $10^{-8}$ y absoluta
+$10^{-10}$. La exposición inferida, la resolución
 semanal, la simetrización necesaria para conectividad y la ausencia de capital
 propio observado limitan la interpretación financiera. En particular, el
 radio espectral de exposición cruda no sustituye al de una matriz de
@@ -744,198 +923,294 @@ apalancamiento \cite{macchiati2024spectral}; TVL tampoco es capital propio
 
 \subsection{La herramienta}
 
-La solución es un programa en Python llamado \texttt{critset}. Recibe una semana
-del panel y, para cada regla y cada presupuesto $k$, devuelve qué protocolos
-elige, cuánto daño causa quitarlos y cuánto tarda. Usa las bibliotecas NumPy,
-SciPy, igraph y pandas, y se instala con \texttt{uv}. Con
-\texttt{critset run} se analiza una semana; con \texttt{critset experiment}, todas
-las semanas del estudio.
+La solución es un paquete de Python, \texttt{critset} (versión 1.1.0), basado
+en NumPy, SciPy, igraph y pandas e instalable con \texttt{uv}. Para una semana
+del panel y cada regla y presupuesto $k$, devuelve los protocolos elegidos, todas
+las medidas de daño de las Secciones~V-B a V-D y el tiempo de cálculo. La orden
+\texttt{critset run} analiza una semana; \texttt{critset experiment}, el
+protocolo completo; \texttt{critset reevaluate} recalcula las medidas a partir
+de los conjuntos guardados sin volver a correr las reglas, y
+\texttt{critset summary} produce las tablas, las semanas ganadas y los
+intervalos bootstrap.
 
 \subsection{Decisiones principales}
 
-\paragraph{Articulación} En cada paso hay que saber qué pasa al quitar cada
-punto de articulación. En vez de probarlos uno por uno, un solo recorrido del
-grafo (el de Tarjan) da el tamaño de todas las piezas que se separarían.
+\paragraph{Articulación} Cada paso usa un solo recorrido en profundidad para
+conocer la componente mayor residual de todos los puntos de articulación
+(Proposición~\ref{prop:tarjan}).
 
-\paragraph{CDS} Se usó el algoritmo de Guha y Khuller tal como se describió en
-la Sección~VI. Luego, dentro del conjunto que produce, se eligen los $k$
-vértices que más exposición retiran.
+\paragraph{CDS} Se implementó el algoritmo de Guha y Khuller tal como se
+describe en la Sección~\ref{sec:reglas}; dentro de $B_t$ se eligen los $k$
+vértices por ganancia marginal en $L_{\mathrm{pond}}$.
 
-\paragraph{Espectral} Esta regla es la más costosa, porque en cada paso hay que
-recalcular el radio espectral para cada candidato. Se aprovechó que ese valor
-depende solo del grupo de vértices más conectado entre sí. Basta probar los
-vértices de ese grupo, que son menos de la mitad de la red, y el resultado es
-el mismo que probarlos todos.
+\paragraph{Espectral} Es la regla más costosa, porque en cada paso recalcula el
+radio espectral para cada candidato. La Proposición~\ref{prop:espectral}
+permite evaluar solo los vértices de la componente fuertemente conexa que
+alcanza el radio, menos de la mitad de $C_t$, con el mismo resultado que
+evaluarlos todos.
 
-\paragraph{Tamaño de los protocolos} El panel no trae el TVL de cada protocolo.
-DeXposure lo publica solo para unas semanas alrededor de Terra/Luna y de FTX, y
-aun ahí falta para el 13 al 22\,\% de los protocolos, entre ellos algunos de los
-más grandes, como \emph{Ethereum}. Como acordamos comparar contra TVL solo con
-datos completos, ese control se presenta aparte, como exploratorio.
+\paragraph{TVL} El panel no trae el TVL de cada protocolo. DeXposure lo publica
+solo para cuatro semanas alrededor de Terra/Luna y de FTX, y aun ahí falta para
+el 13 al 22\,\% de $C_t$, entre ellos protocolos grandes como \emph{Ethereum}.
+Por eso ese control es exploratorio.
 
-\paragraph{Exclusión de nodos} La herramienta permite quitar un nodo antes de
-analizar. Se usó para repetir todo sin el nodo \emph{Unknown}
-(Sección~\ref{sec:unknown}).
+\paragraph{Variantes de sensibilidad} La herramienta permite retirar
+identificadores del panel antes de construir $C_t$ (una lista curada de 24
+nodos que no son protocolos se incluye en \texttt{datos/no\_protocolos.txt}) y
+restringir $C_t$ a su 2-núcleo.
 
 \subsection{Verificación}
 
-La herramienta tiene 35 pruebas automáticas. Comparan cada cálculo con una
-versión independiente (NetworkX o fuerza bruta) sobre grafos pequeños.
+La herramienta tiene 48 pruebas automáticas. Comparan cada cálculo con una
+versión independiente (NetworkX o fuerza bruta) sobre grafos pequeños; las
+nuevas comprueban la identidad \eqref{eq:lest-desc}, la definición
+\eqref{eq:frel} y el 2-núcleo. Al recalcular las medidas desde los conjuntos
+guardados, $L_{\mathrm{est}}$ y $L_{\mathrm{pond}}$ coinciden exactamente con
+las de la corrida original.
+
+\subsection{Reproducibilidad}
+
+El código, los resultados y las figuras se entregan con este documento en
+\texttt{critset-herramienta.zip}.
+% TODO(David): agregar la URL pública del repositorio y el commit.
+El panel es \texttt{filtered\_graph\_data.csv} de DeXposure, con SHA-256 que
+empieza por \texttt{5bbfa9fb5eabcbfa}. Las únicas fuentes de azar son la línea
+base aleatoria (semillas 0 a 19) y el bootstrap (semilla 0); todas las reglas
+son deterministas, con desempate lexicográfico.
 
 \section{Resultados}
 \label{sec:resultados}
 
 Se analizaron 13 semanas entre 2022 y 2024: la primera de cada trimestre y las
-anteriores a Terra/Luna, FTX y USDC. En esas semanas la componente gigante tiene
-entre 1\,058 y 2\,838 protocolos, así que quitar 20 es quitar menos del 2\,\%.
+anteriores a Terra/Luna, FTX y USDC. En esas semanas la componente gigante
+tiene entre 1\,058 y 2\,838 protocolos; quitar 10 es quitar menos del 1\,\%.
+Salvo que se indique otra cosa, las cifras son medianas entre las 13 semanas
+con $k=10$, el mismo estadístico de las figuras.
 
-\subsection{Cómo cambia la red en el tiempo}
+\subsection{Evolución de la red}
 
 La Fig.~\ref{fig:caracterizacion} muestra la red desde 2021. Crece de forma
-casi continua y casi todos los protocolos (más del 98\,\%) están en la
-componente gigante. Los diez protocolos más grandes concentran entre el 60 y el
-96\,\% de la exposición. El segundo valor propio $\lambda_2$ de la matriz laplaciana de la
-componente gigante se queda quieto
-durante meses aunque la red crezca, así que no sirve para medir su
-robustez.
-
-La última semana del panel (abril de 2024) pierde de golpe casi mil
-protocolos; parece un dato incompleto y no se usó.
+casi continua y más del 98\,\% de los protocolos está en la componente
+gigante. Los diez protocolos de mayor fuerza concentran entre el 60 y el
+96\,\% de la exposición. El grado medio de $C_t$ se mantiene entre 3 y 6{,}5,
+mientras que el grado máximo crece con la red hasta superar los 2\,000
+vecinos, y entre el 35 y el 45\,\% de los vértices son hojas en la mayoría de
+las semanas. El valor $\lambda_2$ del laplaciano de la componente gigante
+permanece casi constante durante meses aunque la red crezca, por lo que no
+resulta útil como medida de robustez en esta instancia. La última semana del
+panel (abril de 2024) pierde de golpe casi mil protocolos; se interpretó como
+un dato incompleto y no se usó.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig_caracterizacion.pdf}
-\caption{La red semana a semana, de 2021 a 2024. Las líneas verticales marcan
-Terra/Luna, FTX y USDC.}
+\caption{Invariantes de la red por semana, de 2021 a 2024. Las líneas
+verticales marcan Terra/Luna, FTX y USDC.}
 \label{fig:caracterizacion}
 \end{figure*}
 
-\subsection{Qué regla causa más daño}
+\subsection{Comparación de las reglas}
 
-La Fig.~\ref{fig:curvas} y la Tabla~\ref{tab:k10} dan la respuesta. Depende de
-cómo se mida el daño.
+La Fig.~\ref{fig:curvas} y la Tabla~\ref{tab:k10} resumen la comparación. Cada
+familia gana en la medida que optimiza.
 
-\emph{Si se cuentan protocolos desconectados}, ganan las reglas estructurales.
-Con $k=10$, la articulación es la mejor en 12 de las 13 semanas y siempre supera
-a la fuerza de exposición.
+\emph{Pérdida estructural.} La articulación alcanza la mayor
+$L_{\mathrm{est}}$ en las 13 semanas. Su ventaja sobre la intermediación es
+pequeña: la diferencia pareada media es 0{,}012 (IC 95\,\%: 0{,}007--0{,}017) y
+la intermediación queda a menos de 0{,}01 de la articulación en 9 de las 13
+semanas, así que en la práctica empatan. Sobre la fuerza, la ventaja es de
+0{,}113 (0{,}092--0{,}142).
 
-\emph{Si se mide la exposición que se pierde}, ganan las reglas de tamaño: la
-fuerza y el CDS. Intermediación, articulación y espectral quedan por debajo de la
-fuerza en todas las semanas.
+\emph{Pérdida ponderada.} El control voraz alcanza la mayor
+$L_{\mathrm{pond}}$ en las 13 semanas. La fuerza queda a 0{,}015
+(0{,}009--0{,}023) del voraz y el CDS a 0{,}020 (0{,}012--0{,}029). Con la
+tolerancia de 0{,}01, la fuerza empata con el voraz en 7 semanas y el CDS en 4.
+El CDS, por tanto, no supera al voraz sin restricción: su desempeño en
+exposición proviene de la selección voraz, no de la columna vertebral. El
+Jaccard medio entre CDS y voraz con $k=10$ es 0{,}55, el más alto fuera del
+par articulación--intermediación.
 
-Quitar protocolos al azar casi no hace daño con ninguna de las dos medidas.
+\emph{Fragmentación relativa.} Con $F_{\mathrm{rel}}$, que ninguna regla
+optimiza, no hay una familia dominante. Todas las medianas están entre 0{,}009
+y 0{,}016: en la semana típica, cualquier regla deja más del 98\,\% de la exposición superviviente
+en una sola componente. El voraz tiene el mayor promedio, pero sus diferencias
+con articulación, intermediación, espectral y CDS tienen intervalos que
+incluyen el cero.
+
+La remoción al azar no causa daño apreciable en ninguna medida.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig_curvas.pdf}
 \caption{Daño según el número $k$ de protocolos quitados. La línea es la
-mediana de las 13 semanas y la banda muestra la variación entre semanas.
-\emph{Voraz} es un control que en cada paso quita el protocolo que más
-exposición retira.}
+mediana de las 13 semanas y la banda, el rango intercuartílico (percentiles 25
+a 75). \emph{Voraz} es el control que en cada paso quita el protocolo de mayor
+ganancia en $L_{\mathrm{pond}}$.}
 \label{fig:curvas}
 \end{figure*}
 
 \begin{table}[!t]
 \renewcommand{\arraystretch}{1.2}
-\caption{Daño promedio al quitar $k=10$ protocolos y semanas en que cada regla
-fue la mejor}
+\caption{Daño con $k=10$: mediana de las 13 semanas y semanas ganadas
+(estrictas/con tolerancia 0{,}01)}
 \label{tab:k10}
 \centering
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccc}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccc}
 \toprule
-& \multicolumn{2}{c}{Protocolos desconectados}
-& \multicolumn{2}{c}{Exposición perdida} \\
-\cmidrule(lr){2-3}\cmidrule(lr){4-5}
-Regla & daño & semanas & daño & semanas \\
+& \multicolumn{2}{c}{$L_{\mathrm{est}}$}
+& \multicolumn{2}{c}{$L_{\mathrm{pond}}$}
+& \multicolumn{2}{c}{$F_{\mathrm{rel}}$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Regla & med. & gana & med. & gana & med. & gana \\
 \midrule
-Fuerza          & 0{,}41 & 0  & \textbf{0{,}95} & 6 \\
-Intermediación  & 0{,}51 & 1  & 0{,}84 & 0 \\
-PageRank        & 0{,}43 & 0  & 0{,}92 & 0 \\
-Articulación    & \textbf{0{,}52} & 12 & 0{,}87 & 0 \\
-CDS             & 0{,}45 & 0  & 0{,}94 & 7 \\
-Espectral       & 0{,}48 & 0  & 0{,}86 & 0 \\
+Fuerza          & 0{,}43 & 0/0  & 0{,}95 & 0/7  & 0{,}011 & 0/8 \\
+Intermediación  & 0{,}52 & 1/9  & 0{,}87 & 0/0  & 0{,}009 & 1/7 \\
+PageRank        & 0{,}45 & 0/0  & 0{,}93 & 0/0  & 0{,}010 & 1/7 \\
+Articulación    & \textbf{0{,}53} & 13/13 & 0{,}90 & 0/0 & 0{,}010 & 1/8 \\
+CDS             & 0{,}45 & 0/0  & 0{,}94 & 0/4  & 0{,}016 & 3/10 \\
+Espectral       & 0{,}50 & 0/0  & 0{,}88 & 0/0  & 0{,}016 & 0/8 \\
+Voraz           & 0{,}44 & 0/0  & \textbf{0{,}97} & 13/13 & 0{,}016 & 7/10 \\
 \midrule
-Al azar         & 0{,}01 & -- & 0{,}01 & -- \\
+Al azar         & 0{,}01 & --   & 0{,}01 & --   & 0{,}000 & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Por qué las dos medidas no coinciden}
+\subsection{Composición del daño}
 
-La Fig.~\ref{fig:descomposicion} separa la exposición perdida en dos partes: la
-de los protocolos quitados y la que queda aislada del resto. La segunda es
-casi cero en todos los casos (nunca pasa de 0{,}003).
+La Fig.~\ref{fig:descomposicion} descompone ambas pérdidas. En la ponderada,
+$L_{\mathrm{frag}}$ es casi nula: su mediana va de 0{,}0006 (fuerza) a 0{,}0009
+(articulación, intermediación, espectral) y su máximo en todos los conjuntos
+evaluados es 0{,}009. La exposición se pierde casi solo por quitar protocolos
+grandes, lo que coincide con la Proposición~\ref{prop:submod}.
 
-Es decir, las reglas estructurales sí parten la red, pero lo que separan son
-protocolos pequeños de la orilla. La exposición se pierde casi solo por quitar
-a los protocolos grandes, y por eso ahí ganan las reglas de tamaño.
+En la estructural, el daño consiste sobre todo en aislar hojas. Para la
+articulación, de $L_{\mathrm{est}}=0{,}52$ (promedio), 0{,}44 son singletons y
+0{,}08 son fragmentos de dos o más vértices; los singletons son el 84\,\% del
+daño. La ventaja estructural persiste en la parte no trivial: $L_{\mathrm{multi}}$
+es 0{,}08 para la articulación, 0{,}07 para la intermediación y 0{,}05 para la
+fuerza y el voraz. Es una ventaja real, pero de unos tres puntos
+porcentuales de la red.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig_descomposicion.pdf}
-\caption{Exposición perdida con $k=10$, separada en la de los protocolos
-quitados ($L_{\mathrm{directa}}$) y la que queda aislada
-($L_{\mathrm{frag}}$). A la derecha, la segunda parte ampliada.}
+\caption{Composición del daño con $k=10$ (medianas de las 13 semanas).
+Izquierda: $L_{\mathrm{pond}}=L_{\mathrm{directa}}+L_{\mathrm{frag}}$; el
+rótulo da el valor de $L_{\mathrm{frag}}$. Derecha:
+$L_{\mathrm{est}}=k/|C_t|+L_{\mathrm{single}}+L_{\mathrm{multi}}$.}
 \label{fig:descomposicion}
 \end{figure*}
 
-\subsection{El nodo \emph{Unknown}}
+\subsection{Sensibilidad}
+\label{sec:sensibilidad}
 \label{sec:unknown}
 
-Casi todas las reglas eligen primero un nodo llamado \emph{Unknown}. No es un
-protocolo: es donde el panel agrupa las contrapartes que no logró identificar.
-Está conectado con cerca de dos tercios de la red y concentra casi la mitad de
-la exposición, o más.
+\paragraph{Nodos que no son protocolos} Casi todas las reglas eligen primero un
+nodo llamado \emph{Unknown}, donde el panel agrupa las contrapartes que no
+logró identificar. Está conectado con cerca de dos tercios de la red y
+concentra la mitad de la exposición o más, así que parte de la conectividad de
+$H_t$ y de $W_0$ es un artefacto de agregación. El panel también incluye
+cadenas (\emph{Ethereum}, \emph{Bitcoin}) y casas de cambio centralizadas
+(\emph{Binance CEX}, \emph{OKX}). Se repitió el estudio de dos formas: sin
+\emph{Unknown}, y sin los 24 nodos de la lista curada (\emph{Unknown}, 8
+cadenas y 15 casas de cambio). Sin ellos, $C_t$ baja a entre 772 y 1\,667
+protocolos. La regla espectral se omitió en ambas corridas por su costo.
 
-Para ver si los resultados dependían de él, se repitió el estudio sin
-\emph{Unknown} (sin la regla espectral, por su costo). La conclusión no cambia:
-la articulación gana en protocolos desconectados las 13 semanas, y la fuerza o
-el CDS ganan en exposición.
+\paragraph{2-núcleo} Para descartar que la ventaja estructural sea solo aislar
+hojas, se repitió el estudio sobre el 2-núcleo de $C_t$, que conserva entre el
+54 y el 61\,\% de sus vértices y ninguna hoja.
 
-También aparecen como nodos algunas cadenas (\emph{Ethereum}, \emph{Bitcoin}) y
-casas de cambio (\emph{Binance}). El panel los registra así, y los resultados
-se refieren a ese panel.
+La Tabla~\ref{tab:sens} resume las tres variantes. La conclusión se mantiene en
+todas: la articulación gana en $L_{\mathrm{est}}$ (12 o 13 semanas) y el voraz
+en $L_{\mathrm{pond}}$ (11 a 13 semanas). Sin los nodos que no son protocolos,
+toda la exposición retirable baja (la mejor $L_{\mathrm{pond}}$ cae de 0{,}97 a
+0{,}77), porque esos nodos concentraban gran parte de $W_0$; en esa variante, el
+CDS gana 3 semanas en exposición. En el 2-núcleo, la articulación conserva la
+mayor $L_{\mathrm{est}}$ (0{,}30 frente a 0{,}22 de la fuerza), así que la
+ventaja estructural no depende solo de las hojas, aunque se reduce. La
+$F_{\mathrm{rel}}$ media queda por debajo de 0{,}06 en todas las variantes.
 
-\subsection{¿Eligen las reglas los mismos protocolos?}
+\begin{table}[!t]
+\renewcommand{\arraystretch}{1.2}
+\caption{Sensibilidad con $k=10$: mediana de las 13 semanas
+($L_{\mathrm{est}}$ / $L_{\mathrm{pond}}$)}
+\label{tab:sens}
+\centering
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccc}
+\toprule
+Regla & Sin \emph{Unknown} & Sin no protocolos & 2-núcleo \\
+\midrule
+Fuerza         & 0{,}21 / 0{,}92 & 0{,}11 / 0{,}69 & 0{,}22 / 0{,}96 \\
+Intermediación & 0{,}36 / 0{,}81 & 0{,}28 / 0{,}55 & 0{,}28 / 0{,}85 \\
+PageRank       & 0{,}28 / 0{,}82 & 0{,}19 / 0{,}56 & 0{,}21 / 0{,}95 \\
+Articulación   & \textbf{0{,}38} / 0{,}83 & \textbf{0{,}30} / 0{,}51 & \textbf{0{,}30} / 0{,}90 \\
+CDS            & 0{,}25 / 0{,}90 & 0{,}22 / 0{,}75 & 0{,}21 / 0{,}90 \\
+Voraz          & 0{,}24 / \textbf{0{,}94} & 0{,}19 / \textbf{0{,}77} & 0{,}22 / \textbf{0{,}97} \\
+\midrule
+$|C_t|$        & 895--2\,149 & 772--1\,667 & 650--1\,742 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-No. La Fig.~\ref{fig:jaccard} mide cuánto se parecen los conjuntos elegidos
-(1 = idénticos, 0 = sin nada en común). La fuerza y la articulación comparten
-apenas una cuarta parte. Las reglas estructurales se parecen entre sí, y el CDS
-se parece más a la fuerza. Hay dos familias de conjuntos, y cada una gana en su
-propia medida.
+\paragraph{Pesos crudos en la regla espectral} En las tres semanas previas a
+los episodios, repetir la regla espectral con pesos crudos en vez de
+$\log(1+w)$ cambia el conjunto: el Jaccard con la versión logarítmica es de
+0{,}43 a 0{,}67 con $k=10$. El daño casi no cambia: $L_{\mathrm{est}}$ varía a
+lo sumo en 0{,}013 y $L_{\mathrm{pond}}$, en 0{,}023.
+
+\subsection{Solapamiento de los conjuntos}
+
+La Fig.~\ref{fig:jaccard} mide el parecido entre los conjuntos elegidos
+(1 = idénticos, 0 = disjuntos). La fuerza y la articulación comparten en
+promedio una cuarta parte. Las reglas estructurales se parecen entre sí, y el
+CDS se parece más a la fuerza y al voraz. Los conjuntos se agrupan en dos
+familias, y cada una gana en la medida que optimiza.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{fig_jaccard.pdf}
-\caption{Parecido entre los conjuntos de 10 protocolos que elige cada regla
-(índice de Jaccard, promedio de las 13 semanas).}
+\caption{Índice de Jaccard entre los conjuntos de 10 protocolos de cada regla,
+promedio de las 13 semanas.}
 \label{fig:jaccard}
 \end{figure}
 
-\subsection{Comparación con TVL}
+\subsection{Controles por TVL y SIS}
 
-Con los datos incompletos (los faltantes contados como cero), el ranking por TVL
-causa menos daño que la fuerza en las cuatro semanas disponibles. Pero los que
-faltan son justamente protocolos grandes, así que este resultado no permite
-sacar conclusiones.
+Con los faltantes contados como cero, en las cuatro semanas con TVL publicado
+el ranking por TVL retira con $k=10$ entre 0{,}52 y 0{,}67 de la exposición,
+frente a 0{,}90--0{,}95 de la fuerza, y casi no desconecta protocolos
+($L_{\mathrm{est}}\leq0{,}03$). El SIS queda entre ambos: 0{,}62--0{,}91 en
+$L_{\mathrm{pond}}$. Como los faltantes son protocolos grandes, estos valores
+subestiman a ambos controles y no permiten conclusiones.
 
 \subsection{Los tres episodios}
 \label{sec:caso}
 
-Se marcó como afectado a todo protocolo cuya exposición cayó a la mitad o menos
-en las cuatro semanas siguientes al evento. Con ese criterio, entre el 47 y el
-67\,\% de la red quedó marcada, probablemente porque en esas semanas cayeron los
-precios de casi todo. Ninguna regla acierta más que esa proporción de forma
-constante en los tres episodios. Para decir algo útil hace falta una lista de
-afectados basada en reportes públicos, que no se alcanzó a armar.
+Se marcó como afectado a todo protocolo cuya fuerza de exposición cayó a la
+mitad o menos en las cuatro semanas siguientes al evento. Con ese criterio,
+entre el 47 y el 67\,\% de $C_t$ quedó marcado, probablemente porque en esas
+semanas cayeron los precios de casi todos los activos. Ninguna regla supera
+esa tasa base de forma consistente en los tres episodios. Un indicador útil
+requiere normalizar por el movimiento del mercado o una lista de afectados
+basada en informes públicos; ambos quedan como trabajo futuro.
 
-\subsection{Tiempo de cálculo}
+\subsection{Tiempo y memoria}
 
-La Fig.~\ref{fig:tiempos} muestra cuánto tarda cada regla. La fuerza y PageRank
-tardan milésimas de segundo; la articulación, el CDS y la intermediación,
-segundos; la espectral, hasta una hora. Todas sirven para revisar la red una vez
-por semana.
+La Fig.~\ref{fig:tiempos} muestra el tiempo de cada regla para $k=20$. La
+fuerza y PageRank tardan milisegundos; la articulación, de 2 a 8\,s; el CDS,
+de 3 a 37\,s; la intermediación, unos 15\,s; el voraz, de 45 a 350\,s, y la
+espectral, de 10 minutos a una hora. Todas sirven para una revisión semanal.
+Con $|C_t|$ variando solo un factor 2{,}7 y las semanas corriendo en paralelo
+en una misma máquina, ajustar un exponente empírico no es confiable (las
+pendientes log--log van de $-0{,}2$ a $2{,}4$); los tiempos son compatibles con
+las cotas de la Sección~\ref{sec:reglas}: $O(nm)$ para la intermediación,
+$O(k(n+m))$ para la articulación (Proposición~\ref{prop:tarjan}) y
+$O(kn(n+m))$ para el voraz. La memoria pico del intérprete, medida con
+\texttt{tracemalloc}, es menor de 6\,MB para todas las reglas salvo la
+intermediación (31\,MB); esa medición no incluye la memoria interna de igraph.
 
 \begin{figure}[!t]
 \centering
@@ -947,22 +1222,35 @@ de la red (escala logarítmica).}
 
 \section{Conclusiones}
 
-La pregunta era si los criterios estructurales encuentran mejor que los de
-tamaño a los protocolos críticos. La respuesta depende de qué se quiera evitar.
+La pregunta era si los criterios estructurales identifican mejor que los de
+tamaño a los protocolos críticos. La respuesta depende de la medida, y en buena
+parte por construcción: la articulación gana en protocolos desconectados, que
+es lo que optimiza, y el voraz gana en exposición retirada, que es lo que
+optimiza. La fuerza queda cerca del voraz porque la pérdida ponderada es, en la
+práctica, una cobertura de aristas submodular (Proposición~\ref{prop:submod}).
 
-Si lo que importa es que la red no se parta, las reglas estructurales son
-mejores, sobre todo la articulación. Si lo que importa es la exposición en
-juego, son mejores las de tamaño. Las reglas estructurales parten la red, pero
-por la orilla, donde hay poca exposición.
+Dos resultados van más allá de esa circularidad. Primero, la mayor parte del
+daño estructural consiste en aislar hojas; la ventaja estructural en
+fragmentos no triviales existe, persiste en el 2-núcleo y sin los nodos que no
+son protocolos, pero es de unos pocos puntos porcentuales. Segundo, con una
+medida que ninguna regla optimiza, la fragmentación relativa de la exposición
+superviviente, ninguna regla parte la exposición: en promedio, todas dejan más del 94\,\%
+de lo que sobrevive en una sola componente, en todas las variantes. En esta
+red, la exposición se concentra en un núcleo que se pierde quitando protocolos,
+no partiéndolo.
 
-El CDS queda en el medio: busca entre pocos candidatos y aun así compite con la
-fuerza en exposición. Estos resultados se mantienen al quitar el nodo
-\emph{Unknown}.
+El CDS no aporta sobre el voraz sin restricción: su $B_t$ tiene entre 73 y 170
+vértices y su desempeño en exposición proviene de la selección voraz.
 
-Queda pendiente armar la lista de afectados en los tres episodios, conseguir el
-TVL completo y medir el daño con contagio entre protocolos (por ejemplo, con
-DebtRank \cite{battiston2012debtrank}). La herramienta \texttt{critset}
-acompaña este documento y reproduce todas las cifras.
+Quedan pendientes, en orden de prioridad: un modelo nulo con recableado que
+preserve grados o fuerzas, para saber si el patrón es propio de esta red;
+versiones adaptativas de fuerza e intermediación y heurísticas de
+desmantelamiento como la influencia colectiva; el óptimo exacto para $k=2$ en
+las semanas pequeñas, apoyado en el Lema~\ref{lem:hojas}; una medida de
+alcance dirigido o DebtRank \cite{battiston2012debtrank}, que use la dirección
+de la exposición; y la validación con episodios normalizada por el mercado y
+con listas de afectados curadas. La herramienta \texttt{critset} acompaña este
+documento y reproduce todas las cifras.
 
 
 % \section*{Agradecimientos}

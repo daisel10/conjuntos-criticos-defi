@@ -84,39 +84,53 @@ Guha--Khuller, inmunización espectral exacta.\\
 Terra/Luna, FTX y USDC), $k\in\{1,2,5,10,20\}$.
 \end{block}
 
+\begin{block}{Resultados teóricos}
+\begin{itemize}
+\item \clave{Lema de las hojas}: hay un óptimo sin hojas.
+\item Articulación \clave{óptima para $k=1$} en $L_{\mathrm{est}}$.
+\item $L_{\mathrm{directa}}$ \clave{submodular}: voraz $\geq(1-1/e)$ del óptimo.
+\item $\rho(A)=\max_{\text{SCC}}\rho$ (Frobenius).
+\end{itemize}
+\end{block}
+
 \end{column}
 
 % ------------------------------------------------------------------ columna 2
 \begin{column}{0.36\linewidth}
 
-\begin{block}{Los dos objetivos ordenan al revés}
+\begin{block}{Cada familia gana en lo que optimiza}
 \centering
 \includegraphics[width=\linewidth]{fig_curvas.pdf}
 
 \vspace{0.5ex}
 \raggedright
-\begin{tabular}{lcccc}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccccc}
 \toprule
-$k=10$ & $L_{\mathrm{est}}$ & gana & $L_{\mathrm{pond}}$ & gana \\
+$k=10$ & $L_{\mathrm{est}}$ & gana & $L_{\mathrm{pond}}$ & gana & $F_{\mathrm{rel}}$ & gana \\
 \midrule
-Fuerza         & 0{,}409 & 0  & 0{,}948 & 6 \\
-Intermediación & 0{,}510 & 1  & 0{,}837 & 0 \\
-PageRank       & 0{,}430 & 0  & 0{,}924 & 0 \\
-Articulación   & \textbf{0{,}522} & \textbf{12} & 0{,}867 & 0 \\
-CDS            & 0{,}445 & 0  & \textbf{0{,}942} & \textbf{7} \\
-Espectral      & 0{,}475 & 0  & 0{,}856 & 0 \\
+Fuerza         & 0{,}43 & 0/0 & 0{,}95 & 0/7 & 0{,}011 & 0/8 \\
+Intermediación & 0{,}52 & 1/9 & 0{,}87 & 0/0 & 0{,}009 & 1/7 \\
+PageRank       & 0{,}45 & 0/0 & 0{,}93 & 0/0 & 0{,}010 & 1/7 \\
+Articulación   & \textbf{0{,}53} & \textbf{13/13} & 0{,}90 & 0/0 & 0{,}010 & 1/8 \\
+CDS            & 0{,}45 & 0/0 & 0{,}94 & 0/4 & 0{,}016 & 3/10 \\
+Espectral      & 0{,}50 & 0/0 & 0{,}88 & 0/0 & 0{,}016 & 0/8 \\
+Voraz          & 0{,}44 & 0/0 & \textbf{0{,}97} & \textbf{13/13} & 0{,}016 & 7/10 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
+
+\vspace{0.3ex}
+{\small Medianas; gana = estrictas / a menos de 0{,}01. Victorias \clave{en parte circulares}: cada regla gana en lo que optimiza. Con $F_{\mathrm{rel}}$, que nadie optimiza, ninguna domina.}
 \end{block}
 
-\begin{block}{Casi todo el daño ponderado es directo}
+\begin{block}{De qué está hecho el daño}
 \centering
 \includegraphics[width=\linewidth]{fig_descomposicion.pdf}
 
 \raggedright
-$L_{\mathrm{frag}}\le0{,}003$ siempre. Las reglas estructurales desconectan
-\clave{periferia de poco peso}; la ventaja de la fuerza en exposición viene de
-elegir vértices pesados.
+$L_{\mathrm{frag}}\le0{,}009$ siempre: la exposición se pierde quitando, no
+partiendo. El 84\,\% del $L_{\mathrm{est}}$ de la articulación son \clave{hojas
+aisladas}; en fragmentos $\geq2$ su ventaja sobre la fuerza es de 3 puntos.
 \end{block}
 
 \begin{block}{Dos familias de conjuntos}
@@ -131,11 +145,8 @@ El conjunto estructuralmente crítico \clave{no} es el de los más grandes.
 
 \begin{block}{Herramienta \texttt{critset}}
 \begin{itemize}
-\item Python con uv; CLI reproducible y reanudable.
-\item Articulación en $O(n+m)$ por paso (Tarjan con tamaños de subárbol).
-\item Espectral exacta: $\rho(A)=\max_{\text{SCC}}\rho(A[\text{SCC}])$; solo
-      se evalúa la SCC dominante.
-\item 35 pruebas contra NetworkX y fuerza bruta.
+\item CLI reproducible (uv); articulación en $O(n+m)$ por paso (Tarjan).
+\item 48 pruebas contra NetworkX y fuerza bruta.
 \end{itemize}
 \end{block}
 
@@ -144,25 +155,22 @@ El conjunto estructuralmente crítico \clave{no} es el de los más grandes.
 % ------------------------------------------------------------------ columna 3
 \begin{column}{0.31\linewidth}
 
-\begin{block}{Sensibilidad: el nodo \emph{Unknown}}
-Etiqueta de contrapartes no identificadas; adyacente al 63--74\,\% de $C_t$ y
-con 43--72\,\% de $W_0$. Sin él:
-
-\vspace{0.5ex}
+\begin{block}{Sensibilidad ($k=10$, $L_{\mathrm{est}}$ / $L_{\mathrm{pond}}$)}
 \centering
-\begin{tabular}{lcc}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccc}
 \toprule
-$k=10$ & $L_{\mathrm{est}}$ & $L_{\mathrm{pond}}$ \\
+ & Sin \emph{Unk.} & Sin no prot. & 2-núcleo \\
 \midrule
-Fuerza       & 0{,}212 & \textbf{0{,}903} \\
-Articulación & \textbf{0{,}369} & 0{,}770 \\
-CDS          & 0{,}251 & 0{,}891 \\
+Fuerza       & 0{,}21/0{,}92 & 0{,}11/0{,}69 & 0{,}22/0{,}96 \\
+Articulación & \textbf{0{,}38}/0{,}83 & \textbf{0{,}30}/0{,}51 & \textbf{0{,}30}/0{,}90 \\
+CDS          & 0{,}25/0{,}90 & 0{,}22/0{,}75 & 0{,}21/0{,}90 \\
+Voraz        & 0{,}24/\textbf{0{,}94} & 0{,}19/\textbf{0{,}77} & 0{,}22/\textbf{0{,}97} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 
 \raggedright
-Articulación gana $L_{\mathrm{est}}$ las 13 semanas; fuerza o CDS ganan
-$L_{\mathrm{pond}}$. \clave{El patrón se mantiene.}
+Sin \emph{Unknown}, sin cadenas ni exchanges, y sin hojas: \clave{el patrón se mantiene}.
 \end{block}
 
 \begin{block}{Costo computacional}
@@ -179,17 +187,18 @@ Todas viables para monitoreo semanal.
 \item Indicador de afectación (caída de al menos 50\,\% en 4 semanas): tasa base
       47--67\,\%. Ninguna regla la supera en los tres episodios:
       \clave{resultado nulo}.
-\item El TVL publicado no cubre $C_t$: TVL y SIS quedan como exploratorios.
+\item El TVL publicado no cubre $C_t$: TVL (0{,}52--0{,}67) y SIS (0{,}62--0{,}91
+      de $L_{\mathrm{pond}}$) quedan como exploratorios.
 \end{itemize}
 \end{block}
 
 \begin{block}{Conclusiones}
 \begin{itemize}
-\item \clave{Estructura y tamaño responden a preguntas distintas}:
-      las reglas estructurales desconectan más protocolos, las de tamaño
-      retiran más exposición.
-\item El CDS es el punto de encuentro: 73--170 candidatos, a 0{,}02 del voraz.
-\item Pendiente: afectados curados, TVL completo y daño con propagación.
+\item Cada familia gana en la medida que optimiza; el daño estructural es
+      sobre todo \clave{aislar hojas}.
+\item Ninguna regla parte la exposición: en promedio queda más del 94\,\% en una componente.
+\item El CDS no supera al voraz sin restricción.
+\item Pendiente: modelo nulo, reglas adaptativas, $k=2$ exacto, DebtRank.
 \end{itemize}
 \end{block}
 

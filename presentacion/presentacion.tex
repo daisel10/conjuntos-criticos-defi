@@ -115,8 +115,8 @@ L_{\mathrm{pond}}=\underbrace{L_{\mathrm{directa}}}_{\text{peso de }S}
       así que solo se evalúan los vértices de la SCC dominante (393--1\,230 de
       1\,058--2\,838).
 \item Evaluación del daño vectorizada; experimento paralelo y reanudable.
-\item \clave{35 pruebas} contra NetworkX y fuerza bruta: medidas de daño,
-      articulación, validez del CDS, PageRank, regla espectral.
+\item \clave{48 pruebas} contra NetworkX y fuerza bruta: medidas de daño,
+      articulación, validez del CDS, PageRank, regla espectral, 2-núcleo.
 \end{itemize}
 \end{frame}
 
@@ -127,68 +127,85 @@ L_{\mathrm{pond}}=\underbrace{L_{\mathrm{directa}}}_{\text{peso de }S}
 \small Mediana de 13 semanas; banda: rango intercuartílico.
 \end{frame}
 
-\begin{frame}{Resultado 1: con $k=10$}
+\begin{frame}{Resultado 1: cada familia gana en lo que optimiza}
 \centering
 \small
-\begin{tabular}{lcccc}
+\begin{tabular}{lcccccc}
 \toprule
-Regla & $L_{\mathrm{est}}$ & semanas ganadas & $L_{\mathrm{pond}}$ & semanas ganadas \\
+& \multicolumn{2}{c}{$L_{\mathrm{est}}$} & \multicolumn{2}{c}{$L_{\mathrm{pond}}$} & \multicolumn{2}{c}{$F_{\mathrm{rel}}$} \\
+Regla & med. & gana & med. & gana & med. & gana \\
 \midrule
-Fuerza          & 0{,}409 & 0  & 0{,}948 & 6 \\
-Intermediación  & 0{,}510 & 1  & 0{,}837 & 0 \\
-PageRank        & 0{,}430 & 0  & 0{,}924 & 0 \\
-Articulación    & \textbf{0{,}522} & \textbf{12} & 0{,}867 & 0 \\
-CDS             & 0{,}445 & 0  & \textbf{0{,}942} & \textbf{7} \\
-Espectral       & 0{,}475 & 0  & 0{,}856 & 0 \\
+Fuerza          & 0{,}43 & 0/0  & 0{,}95 & 0/7  & 0{,}011 & 0/8 \\
+Intermediación  & 0{,}52 & 1/9  & 0{,}87 & 0/0  & 0{,}009 & 1/7 \\
+PageRank        & 0{,}45 & 0/0  & 0{,}93 & 0/0  & 0{,}010 & 1/7 \\
+Articulación    & \textbf{0{,}53} & \textbf{13/13} & 0{,}90 & 0/0 & 0{,}010 & 1/8 \\
+CDS             & 0{,}45 & 0/0  & 0{,}94 & 0/4  & 0{,}016 & 3/10 \\
+Espectral       & 0{,}50 & 0/0  & 0{,}88 & 0/0  & 0{,}016 & 0/8 \\
+Voraz (control) & 0{,}44 & 0/0  & \textbf{0{,}97} & \textbf{13/13} & 0{,}016 & 7/10 \\
 \midrule
-Voraz (control) & 0{,}427 & -- & 0{,}963 & -- \\
-Aleatorio       & 0{,}010 & -- & 0{,}014 & -- \\
+Aleatorio       & 0{,}01 & --   & 0{,}01 & --   & 0{,}000 & -- \\
 \bottomrule
 \end{tabular}
 
-\vspace{1em}
+\vspace{0.3em}
+{\footnotesize $k=10$, mediana de 13 semanas; gana = semanas estrictas / a menos de 0{,}01 del máximo.}
 \begin{itemize}
-\item Articulación supera a la fuerza en $L_{\mathrm{est}}$ las 13 semanas
-      ($+0{,}11$ en promedio).
-\item Intermediación, articulación y espectral pierden contra la fuerza en
-      $L_{\mathrm{pond}}$ las 13 semanas.
+\item Articulación optimiza $R_{\mathrm{est}}$; el voraz, $L_{\mathrm{pond}}$: \clave{victorias en parte circulares}.
+\item Articulación vs.\ intermediación: $+0{,}012$ (IC 95\,\%: 0{,}007--0{,}017), empate práctico.
+\item CDS queda 0{,}020 bajo el voraz: su mérito es el voraz, no la columna vertebral.
+\item $F_{\mathrm{rel}}$, que nadie optimiza: \clave{ninguna familia domina}.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Resultado 2: casi todo el daño ponderado es directo}
+\begin{frame}{Resultado 2: de qué está hecho el daño}
 \centering
 \includegraphics[width=\textwidth]{fig_descomposicion.pdf}
 
-\vspace{0.5em}
+\vspace{0.3em}
 \begin{itemize}
-\item $L_{\mathrm{frag}}\le 0{,}003$ en toda regla, semana y $k$.
-\item Lo que las reglas estructurales desconectan es \clave{periferia de poco peso}.
-\item La ventaja de la fuerza y el CDS en exposición viene de elegir vértices
-      pesados, no de fragmentar.
+\item $L_{\mathrm{frag}}\le 0{,}009$ en todo conjunto evaluado: la exposición se pierde \clave{quitando}, no partiendo.
+\item Articulación: 84\,\% de su $L_{\mathrm{est}}$ son \clave{hojas aisladas}.
+\item En fragmentos $\geq2$: 0{,}08 (articulación) vs.\ 0{,}05 (fuerza). Ventaja real, pero de 3 puntos.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Resultado 3: el nodo \emph{Unknown}}
+\begin{frame}{Resultados teóricos}
 \begin{itemize}
-\item Primera elección de cuatro reglas estructurales en las 13 semanas: es la
-      etiqueta que agrupa contrapartes \clave{no identificadas}.
-\item Adyacente al 63--74\,\% de $C_t$; 43--72\,\% de $W_0$.
-\item Se repitió el experimento \clave{sin él} (cinco reglas + voraz):
+\item \clave{Lema de las hojas.} Para ambos objetivos existe un óptimo sin hojas
+      (intercambio hoja $\to$ vecino). Reduce la búsqueda en 37--45\,\%.
+\item \clave{Articulación es óptima para $k=1$} en $L_{\mathrm{est}}$: un no-corte deja $n-1$; un corte, a lo sumo $n-2$.
+\item \clave{$L_{\mathrm{directa}}$ es submodular}: cobertura ponderada de aristas.
+      El voraz garantiza $(1-1/e)$ y, para $k=1$, la fuerza es óptima.
+      Con $L_{\mathrm{frag}}\approx0$, explica por qué el tamaño gana en exposición.
+\item \clave{Atajo espectral}: $\rho(A)=\max_{\text{SCC}}\rho$ (forma normal de Frobenius);
+      solo la SCC dominante importa, y con empate ninguna remoción baja $\rho$.
+\item \clave{Tarjan}: un DFS da la componente mayor tras quitar cada punto de articulación, en $O(n+m)$.
 \end{itemize}
-\vspace{0.4em}
+\end{frame}
+
+\begin{frame}{Resultado 3: sensibilidad}
 \centering
-\begin{tabular}{lcc}
+\small
+\begin{tabular}{lccc}
 \toprule
-Sin \emph{Unknown}, $k=10$ & $L_{\mathrm{est}}$ & $L_{\mathrm{pond}}$ \\
+$k=10$, $L_{\mathrm{est}}$ / $L_{\mathrm{pond}}$ & Sin \emph{Unknown} & Sin no protocolos & 2-núcleo \\
 \midrule
-Fuerza       & 0{,}212 & \textbf{0{,}903} (gana 9) \\
-Articulación & \textbf{0{,}369} (gana 13) & 0{,}770 \\
-CDS          & 0{,}251 & 0{,}891 (gana 4) \\
+Fuerza         & 0{,}21 / 0{,}92 & 0{,}11 / 0{,}69 & 0{,}22 / 0{,}96 \\
+Intermediación & 0{,}36 / 0{,}81 & 0{,}28 / 0{,}55 & 0{,}28 / 0{,}85 \\
+PageRank       & 0{,}28 / 0{,}82 & 0{,}19 / 0{,}56 & 0{,}21 / 0{,}95 \\
+Articulación   & \textbf{0{,}38} / 0{,}83 & \textbf{0{,}30} / 0{,}51 & \textbf{0{,}30} / 0{,}90 \\
+CDS            & 0{,}25 / 0{,}90 & 0{,}22 / 0{,}75 & 0{,}21 / 0{,}90 \\
+Voraz          & 0{,}24 / \textbf{0{,}94} & 0{,}19 / \textbf{0{,}77} & 0{,}22 / \textbf{0{,}97} \\
 \bottomrule
 \end{tabular}
 
 \vspace{0.6em}
-\raggedright El patrón se mantiene y se acentúa.
+\raggedright
+\begin{itemize}
+\item \emph{Unknown}: contrapartes no identificadas, adyacente al 63--74\,\% de $C_t$.
+\item No protocolos: \emph{Unknown} + 8 cadenas + 15 exchanges centralizados.
+\item 2-núcleo: sin hojas, 54--61\,\% de $C_t$. La ventaja estructural \clave{persiste, más chica}.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Resultado 4: dos familias de conjuntos}
@@ -218,7 +235,7 @@ CDS          & 0{,}251 & 0{,}891 (gana 4) \\
 \textbf{TVL y SIS}
 \begin{itemize}
 \item El TVL publicado falta para el 13--22\,\% de $C_t$ (21--49\,\% de la fuerza).
-\item Fuera de la comparación principal; con faltantes en cero, solo exploratorio.
+\item Con faltantes en cero ($k=10$): TVL retira 0{,}52--0{,}67 y SIS 0{,}62--0{,}91, frente a 0{,}90--0{,}95 de la fuerza. Solo exploratorio.
 \end{itemize}
 \end{frame}
 
@@ -241,18 +258,16 @@ CDS          & 0{,}251 & 0{,}891 (gana 4) \\
 
 \begin{frame}{Conclusiones}
 \begin{itemize}
-\item \clave{Estructura y tamaño responden a preguntas distintas.} Las reglas
-      estructurales desconectan más protocolos; las de tamaño retiran más
-      exposición.
-\item Más del 99\,\% de la pérdida ponderada es remoción directa: en esta red,
-      fragmentar no desconecta exposición.
-\item El CDS es el punto de encuentro: 73--170 candidatos, a 0{,}02 del voraz y
-      empatado con la fuerza en exposición.
-\item Resiste al quitar \emph{Unknown}.
+\item Articulación gana en protocolos desconectados; el voraz, en exposición.
+      \clave{Cada uno gana en lo que optimiza.}
+\item El daño estructural es sobre todo \clave{aislar hojas}; la ventaja en fragmentos reales existe pero es pequeña.
+\item Con $F_{\mathrm{rel}}$, que nadie optimiza, \clave{ninguna regla parte la exposición}: en promedio queda más del 94\,\% en una componente.
+\item La submodularidad de $L_{\mathrm{directa}}$ explica por qué el tamaño gana en exposición.
+\item Robusto sin \emph{Unknown}, sin cadenas ni exchanges y en el 2-núcleo.
 \end{itemize}
 \vspace{0.5em}
-\textbf{Pendiente}: lista curada de afectados, TVL completo y una medida con
-propagación (DebtRank, simulador de DeXposure-FM).
+\textbf{Pendiente}: modelo nulo con recableado, reglas adaptativas y de desmantelamiento,
+óptimo exacto para $k=2$, alcance dirigido o DebtRank, episodios normalizados por mercado.
 \end{frame}
 
 \begin{frame}

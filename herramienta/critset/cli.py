@@ -20,7 +20,7 @@ import pandas as pd
 
 from . import __version__, rules
 from .experiment import (EVENTS, K_LIST, affected_set, ar1_neff, characterize_week,
-                         load_tvl, run_week, save, select_weeks)
+                         load_tvl, reevaluate_week, run_week, save, select_weeks)
 from .graph import load_panel, snapshot_from_panel
 from .metrics import Evaluator
 
@@ -44,8 +44,7 @@ def cmd_run(a):
             if k >= snap.n:
                 continue
             d = ev.evaluate_set(seq[:k])
-            curves.append(dict(k=k, R_est=d.R_est, R_pond=d.R_pond, L_est=d.L_est,
-                               L_pond=d.L_pond, L_directa=d.L_directa, L_frag=d.L_frag))
+            curves.append(dict(k=k, **d.row()))
         out["reglas"][name] = {"seleccion": [str(snap.names[i]) for i in seq],
                                "curvas": curves, "segundos": dt}
         print(f"{name:15s} {dt:7.2f}s  " + "  ".join(
@@ -59,6 +58,47 @@ def cmd_run(a):
         pd.DataFrame(rows).to_csv(Path(a.out) / f"curvas_{a.week}.csv", index=False)
     else:
         print(text)
+
+
+def _excluded(a) -> tuple:
+    ids = list(getattr(a, "exclude", []) or [])
+    f = getattr(a, "exclude_file", None)
+    if f:
+        for line in Path(f).read_text(encoding="utf-8").splitlines():
+            line = line.split("#", 1)[0].strip()
+            if line:
+                ids.append(line)
+    return tuple(dict.fromkeys(ids))
+
+
+def cmd_reevaluate(a):
+    """Recalcula curvas.csv (todas las medidas) desde conjuntos.json, sin volver a
+    correr las reglas; conserva segundos y memoria de la corrida original."""
+    res = Path(a.results)
+    sets = json.loads((res / "conjuntos.json").read_text(encoding="utf-8"))
+    old = pd.read_csv(res / "curvas.csv", dtype={"week": str})
+    tasks = [(a.panel, w, seqs, _excluded(a), a.core2) for w, seqs in sets.items()]
+    with Pool(min(a.jobs, len(tasks))) as pool:
+        out = pool.map(reevaluate_week, tasks)
+    new = pd.DataFrame([r for o in out for r in o["rows"]]).drop(
+        columns=["seconds", "peak_mb"], errors="ignore")
+    keep = old[["week", "rule", "k", "seconds", "peak_mb"]]
+    cur = new.merge(keep, on=["week", "rule", "k"], how="left")
+    # control de consistencia: las medidas originales deben reproducirse
+    chk = cur.merge(old[["week", "rule", "k", "L_est", "L_pond"]], on=["week", "rule", "k"],
+                    suffixes=("", "_old"))
+    err = max((chk["L_est"] - chk["L_est_old"]).abs().max(), (chk["L_pond"] - chk["L_pond_old"]).abs().max())
+    print(f"discrepancia máxima con la corrida original: {err:.2e}", file=sys.stderr)
+    cur.to_csv(res / "curvas.csv", index=False)
+    pd.DataFrame([o["diag"] for o in out]).sort_values("week").to_csv(res / "diagnosticos.csv", index=False)
+
+
+def cmd_summary(a):
+    from .analysis import summarize
+    out, boot = summarize(a.results, k=a.k, tol=a.tol)
+    with pd.option_context("display.width", 200, "display.max_columns", 40):
+        print(out.round(3))
+        print(boot.round(3))
 
 
 def cmd_experiment(a):
@@ -76,7 +116,7 @@ def cmd_experiment(a):
             results.append(json.loads(f.read_text(encoding="utf-8")))
     done = {r["meta"]["week"] for r in results}
     tasks = [(a.panel, w, labs, tvl.get(w), max(K_LIST), any(l.startswith("pre-") for l in labs),
-              a.rules, tuple(a.exclude))
+              a.rules, _excluded(a), a.core2)
              for w, labs in sel.items() if w not in done]
     print(f"{len(sel)} semanas, {len(tasks)} por calcular: {[t[1] for t in tasks]}", file=sys.stderr)
     if tasks:
@@ -191,7 +231,25 @@ def main(argv=None):
                    help="subconjunto de reglas y controles (por omisión, todos)")
     e.add_argument("--exclude", nargs="*", default=[],
                    help="identificadores a quitar del panel antes de construir C_t")
+    e.add_argument("--exclude-file", default=None,
+                   help="archivo con un identificador por línea a quitar del panel (# comenta)")
+    e.add_argument("--core2", action="store_true", help="restringir C_t a su 2-núcleo")
     e.set_defaults(fn=cmd_experiment)
+
+    v = sub.add_parser("reevaluate", help="Recalcula todas las medidas desde conjuntos.json")
+    v.add_argument("--panel", required=True)
+    v.add_argument("--results", default="resultados")
+    v.add_argument("--exclude", nargs="*", default=[])
+    v.add_argument("--exclude-file", default=None)
+    v.add_argument("--core2", action="store_true")
+    v.add_argument("--jobs", type=int, default=4)
+    v.set_defaults(fn=cmd_reevaluate)
+
+    m = sub.add_parser("summary", help="Promedios, semanas ganadas y bootstrap pareado")
+    m.add_argument("--results", default="resultados")
+    m.add_argument("--k", type=int, default=10)
+    m.add_argument("--tol", type=float, default=0.01)
+    m.set_defaults(fn=cmd_summary)
 
     c = sub.add_parser("characterize", help="Invariantes de conectividad de todas las semanas")
     c.add_argument("--panel", required=True)

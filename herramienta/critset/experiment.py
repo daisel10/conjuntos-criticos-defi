@@ -19,7 +19,7 @@ import pandas as pd
 from scipy.linalg import eigh
 
 from . import rules
-from .graph import Snapshot, build_snapshot, snapshot_from_panel
+from .graph import Snapshot, build_snapshot, snapshot_from_panel, two_core_names
 from .metrics import Evaluator, jaccard
 
 K_LIST = [1, 2, 5, 10, 20]
@@ -80,10 +80,9 @@ def run_week(args) -> dict:
     panel_path, week, labels, tvl_week, kmax, with_raw, *rest = args
     only = rest[0] if rest else None        # subconjunto de reglas (None = todas)
     exclude = rest[1] if len(rest) > 1 else ()  # identificadores excluidos del panel
+    core2 = rest[2] if len(rest) > 2 else False  # restringir C_t a su 2-núcleo
     panel = pd.read_csv(panel_path, dtype={"time": str, "source": str, "target": str})
-    if exclude:
-        panel = panel[~panel["source"].isin(exclude) & ~panel["target"].isin(exclude)]
-    snap = snapshot_from_panel(panel, week)
+    snap = snapshot_from_panel(panel, week, exclude=exclude, core2=core2)
     ev = Evaluator(snap)
     rows, seqs, extra = [], {}, {}
     todo = dict(rules.RULES)
@@ -109,21 +108,50 @@ def run_week(args) -> dict:
             if k > len(seq) or k >= snap.n:
                 continue
             d = ev.evaluate_set(seq[:k])
-            rows.append(dict(week=week, rule=name, k=k, R_est=d.R_est, R_pond=d.R_pond,
-                             L_est=d.L_est, L_pond=d.L_pond, L_directa=d.L_directa,
-                             L_frag=d.L_frag, seconds=dt, peak_mb=mem))
-    # línea base aleatoria: media de N_RANDOM permutaciones
-    for k in K_LIST:
-        ds = [ev.evaluate_set(rules.rule_random(snap, k, seed=s)) for s in range(N_RANDOM)]
-        rows.append(dict(week=week, rule="aleatorio", k=k,
-                         R_est=np.mean([d.R_est for d in ds]), R_pond=np.mean([d.R_pond for d in ds]),
-                         L_est=np.mean([d.L_est for d in ds]), L_pond=np.mean([d.L_pond for d in ds]),
-                         L_directa=np.mean([d.L_directa for d in ds]), L_frag=np.mean([d.L_frag for d in ds]),
-                         seconds=np.nan, peak_mb=np.nan))
+            rows.append(dict(week=week, rule=name, k=k, **d.row(), seconds=dt, peak_mb=mem))
+    rows += random_rows(snap, ev, week)
     meta = dict(week=week, labels=labels, V=snap.n_vertices, E=snap.n_arcs,
                 ncomp=snap.n_components, C=snap.n, k_over_C=20 / snap.n,
                 W0=snap.W0, W_all=snap.W_total_all, **extra)
     return dict(rows=rows, seqs=seqs, meta=meta)
+
+
+def random_rows(snap: Snapshot, ev: Evaluator, week: str) -> list[dict]:
+    """Línea base aleatoria: media de N_RANDOM permutaciones con semillas 0..N_RANDOM-1."""
+    rows = []
+    for k in K_LIST:
+        ds = [ev.evaluate_set(rules.rule_random(snap, k, seed=s)).row() for s in range(N_RANDOM)]
+        rows.append(dict(week=week, rule="aleatorio", k=k,
+                         **{c: float(np.mean([d[c] for d in ds])) for c in ds[0]},
+                         seconds=np.nan, peak_mb=np.nan))
+    return rows
+
+
+def reevaluate_week(args) -> dict:
+    """Recalcula todas las medidas de daño a partir de las secuencias ya guardadas
+    (sin volver a correr las reglas). Devuelve filas de curvas y diagnósticos de la semana."""
+    panel_path, week, seqs, exclude, core2 = args
+    panel = pd.read_csv(panel_path, dtype={"time": str, "source": str, "target": str})
+    snap = snapshot_from_panel(panel, week, exclude=exclude, core2=core2)
+    ev = Evaluator(snap)
+    rows = []
+    for name, ids in seqs.items():
+        seq = snap.index_of(ids)
+        assert len(seq) == len(ids), f"{week}/{name}: identificadores fuera de C_t"
+        for k in K_LIST:
+            if k > len(seq) or k >= snap.n:
+                continue
+            rows.append(dict(week=week, rule=name, k=k, **ev.evaluate_set(seq[:k]).row()))
+    rows += random_rows(snap, ev, week)
+    # diagnósticos: PageRank frente a fuerza, hojas
+    from scipy.stats import spearmanr
+    s = rules.strength(snap)
+    pr = rules.pagerank(snap.W)
+    deg = np.diff(snap.U.indptr)
+    diag = dict(week=week, C=snap.n, leaves=int((deg == 1).sum()),
+                core2=len(two_core_names(snap)),
+                spearman_pr_fuerza=float(spearmanr(pr, s).statistic))
+    return dict(rows=rows, diag=diag)
 
 
 # --------------------------------------------------------------- caracterización

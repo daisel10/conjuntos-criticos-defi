@@ -16,7 +16,7 @@ Requiere [uv](https://docs.astral.sh/uv/) y Python ≥ 3.11.
 
 ```bash
 uv sync
-uv run pytest -q          # 35 pruebas contra networkx y fuerza bruta
+uv run pytest -q          # 48 pruebas contra networkx y fuerza bruta
 ```
 
 ## Datos
@@ -52,7 +52,18 @@ uv run critset tvl --panel filtered_graph_data.csv \
 # Sensibilidad: repetir sin el nodo agregado "Unknown" y sin la regla espectral (lenta)
 uv run critset experiment --panel filtered_graph_data.csv --out resultados/sin_unknown \
     --exclude Unknown --rules fuerza intermediacion pagerank articulacion cds voraz
+
+# Sensibilidad: sin los 24 nodos que no son protocolos (Unknown, cadenas, exchanges) y sobre el 2-núcleo
+uv run critset experiment --panel filtered_graph_data.csv --out resultados/sin_no_protocolos     --exclude-file datos/no_protocolos.txt --rules fuerza intermediacion pagerank articulacion cds voraz
+uv run critset experiment --panel filtered_graph_data.csv --out resultados/nucleo2 --core2     --rules fuerza intermediacion pagerank articulacion cds voraz
+
+# Recalcular todas las medidas desde conjuntos.json (sin volver a correr las reglas) y resumir
+uv run critset reevaluate --panel filtered_graph_data.csv --results resultados
+uv run critset summary --results resultados --k 10 --tol 0.01
 ```
+
+En `reevaluate`, pasar los mismos `--exclude`, `--exclude-file` o `--core2` que en el `experiment`
+de ese directorio.
 
 `experiment` guarda cada semana terminada en `resultados/por_semana/` y, si se interrumpe,
 retoma desde ahí. La regla espectral exacta es la más costosa (del orden de una hora por semana
@@ -74,7 +85,13 @@ Los empates se resuelven por orden lexicográfico de identificador.
 
 ## Archivos de salida (`experiment`)
 
-- `curvas.csv`: semana, regla, k, R_est, R_pond, L_est, L_pond, L_directa, L_frag, segundos, MB pico.
+- `curvas.csv`: semana, regla, k, R_est, R_pond, L_est, L_pond, L_directa, L_frag, F_rel
+  (= 1 − W⋆/W₋S), L_single y L_multi (L_est = k/|C_t| + L_single + L_multi), n_single, n_multi,
+  segundos, MB pico (`tracemalloc`, sin la memoria interna de igraph).
+- `diagnosticos.csv` (de `reevaluate`): hojas, tamaño del 2-núcleo y Spearman PageRank–fuerza.
+- `resumen_k10.csv`, `bootstrap_k10.csv` (de `summary`): medias, medianas, semanas ganadas
+  (estrictas y con tolerancia) y diferencias pareadas con IC bootstrap del 95 % (5 000 remuestreos,
+  semilla 0).
 - `semanas.csv`: dimensiones de cada instantánea, tamaño del CDS y cobertura de TVL.
 - `conjuntos.json`: secuencia seleccionada por cada regla y semana (identificadores).
 - `jaccard.csv`: solapamiento entre reglas por semana y k.
@@ -83,4 +100,10 @@ Los empates se resuelven por orden lexicográfico de identificador.
 - `caracterizacion.csv`, `autocorrelacion.csv`: invariantes de las 314 semanas y n efectivo AR(1).
 - `tvl_exploratorio.csv`: TVL y SIS con faltantes en cero, junto a las demás reglas, en las
   cuatro semanas con datos de tamaño.
-- `sin_unknown/`: los mismos archivos para el análisis de sensibilidad sin `Unknown`.
+- `sin_unknown/`, `sin_no_protocolos/`, `nucleo2/`: los mismos archivos para los análisis de
+  sensibilidad.
+
+## Reproducibilidad
+
+Versión 1.1.0. Panel `filtered_graph_data.csv`, SHA-256 `5bbfa9fb5eabcbfa…`. Azar: línea base
+aleatoria con semillas 0–19 y bootstrap con semilla 0; las reglas son deterministas.

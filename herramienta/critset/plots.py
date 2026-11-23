@@ -66,31 +66,42 @@ def fig_curvas(cur: pd.DataFrame, out: Path):
 
 
 def fig_descomposicion(cur: pd.DataFrame, out: Path, k=10):
-    d = cur[(cur["k"] == k) & cur["rule"].isin(ORDER + ["voraz", "aleatorio"])]
-    med = d.groupby("rule")[["L_directa", "L_frag", "L_est"]].median()
+    """Izquierda: L_pond = L_directa + L_frag. Derecha: L_est = k/|C_t| + L_single + L_multi.
+    Medianas entre semanas."""
+    d = cur[(cur["k"] == k) & cur["rule"].isin(ORDER + ["voraz", "aleatorio"])].copy()
+    d["L_quitados"] = d["L_est"] - d["L_single"] - d["L_multi"]
+    med = d.groupby("rule")[["L_directa", "L_frag", "L_quitados", "L_single", "L_multi"]].median()
     rules_ = [r for r in ORDER + ["voraz", "aleatorio"] if r in med.index]
-    fig, axes = plt.subplots(1, 2, figsize=(2 * COLW, 2.1), gridspec_kw={"width_ratios": [1, 1]})
+    fig, axes = plt.subplots(1, 2, figsize=(2 * COLW, 2.2))
     y = np.arange(len(rules_))
     ax = axes[0]
     ax.barh(y, med.loc[rules_, "L_directa"], color="#2a78d6", height=0.6, label="$L_{\\mathrm{directa}}$")
     ax.barh(y, med.loc[rules_, "L_frag"], left=med.loc[rules_, "L_directa"], color="#eb6834",
-            height=0.6, label="$L_{\\mathrm{frag}}$", edgecolor="white", linewidth=1)
+            height=0.6, label="$L_{\\mathrm{frag}}$", edgecolor="white", linewidth=0.5)
+    for i, r in enumerate(rules_):
+        ax.text(med.loc[r, "L_directa"] + med.loc[r, "L_frag"], i,
+                f" frag {med.loc[r, 'L_frag']:.4f}", va="center", fontsize=5.5, color=INK)
     ax.set_yticks(y)
     ax.set_yticklabels([LABEL[r] for r in rules_])
     ax.invert_yaxis()
-    ax.set_xlim(0, 1)
-    ax.set_xlabel(f"Pérdida ponderada, $k={k}$ (mediana)")
+    ax.set_xlim(0, 1.25)
+    ax.set_xticks([0, 0.25, 0.5, 0.75, 1])
+    ax.set_xlabel(f"$L_{{\\mathrm{{pond}}}}$, $k={k}$ (mediana)")
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.32), ncol=2, fontsize=7)
     ax = axes[1]
-    ax.barh(y, med.loc[rules_, "L_frag"], color="#eb6834", height=0.6)
+    left = np.zeros(len(rules_))
+    for col, color, lab in [("L_quitados", "#9aa0a6", "quitados $k/|C_t|$"),
+                            ("L_single", "#f2b134", "singletons"),
+                            ("L_multi", "#1c9e77", "fragmentos $\\geq 2$")]:
+        v = med.loc[rules_, col].to_numpy()
+        ax.barh(y, v, left=left, color=color, height=0.6, label=lab, edgecolor="white", linewidth=0.5)
+        left += v
     ax.set_yticks(y)
     ax.set_yticklabels([])
     ax.invert_yaxis()
-    ax.set_xlabel("$L_{\\mathrm{frag}}$ ampliada")
-    for i, r in enumerate(rules_):
-        ax.text(med.loc[r, "L_frag"], i, f" {med.loc[r, 'L_frag']:.4f}", va="center", fontsize=6.5, color=INK)
-    ax.set_xlim(0, med["L_frag"].max() * 1.45 if med["L_frag"].max() > 0 else 1)
-    ax.xaxis.set_major_locator(plt.MaxNLocator(3))
+    ax.set_xlim(0, 0.6)
+    ax.set_xlabel(f"$L_{{\\mathrm{{est}}}}$, $k={k}$ (mediana)")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.32), ncol=3, fontsize=6.5)
     fig.tight_layout()
     fig.savefig(out / "fig_descomposicion.pdf", bbox_inches="tight")
     plt.close(fig)

@@ -125,8 +125,49 @@ def load_panel(csv_path: str) -> pd.DataFrame:
     return df
 
 
-def snapshot_from_panel(panel: pd.DataFrame, week: str) -> Snapshot:
+def two_core_names(snap: Snapshot) -> np.ndarray:
+    """Identificadores del 2-núcleo de H_t = proyección[C_t] (poda iterativa de hojas).
+
+    El 2-núcleo de un grafo conexo con algún ciclo es conexo: quitar una hoja no
+    desconecta nada, así que la poda conserva la conexidad."""
+    deg = np.diff(snap.U.indptr).astype(np.int64)
+    alive = np.ones(snap.n, dtype=bool)
+    stack = list(np.flatnonzero(deg <= 1))
+    while stack:
+        v = stack.pop()
+        if not alive[v]:
+            continue
+        alive[v] = False
+        for u in snap.U.indices[snap.U.indptr[v]:snap.U.indptr[v + 1]]:
+            if alive[u]:
+                deg[u] -= 1
+                if deg[u] == 1:
+                    stack.append(u)
+    return snap.names[alive]
+
+
+def snapshot_from_panel(panel: pd.DataFrame, week: str, exclude=(), core2: bool = False,
+                        min_weight: float = 0.0) -> Snapshot:
+    """Instantánea de una semana. Variantes de sensibilidad:
+    ``exclude``: identificadores retirados del panel antes de construir G_t;
+    ``core2``: restringe C_t a su 2-núcleo (sin hojas);
+    ``min_weight``: descarta aristas dirigidas agregadas con peso menor al umbral."""
     dw = panel[panel["time"] == week]
     if dw.empty:
         raise ValueError(f"La semana {week} no está en el panel.")
-    return build_snapshot(dw, week)
+    if len(exclude):
+        dw = dw[~dw["source"].isin(exclude) & ~dw["target"].isin(exclude)]
+    if min_weight > 0:
+        d = clean_week(dw)
+        dw = d[d["size"] >= min_weight]
+    snap = build_snapshot(dw, week)
+    if core2:
+        core = set(two_core_names(snap))
+        d = clean_week(dw)
+        d = d[d["source"].isin(core) & d["target"].isin(core)]
+        full = snap
+        snap = build_snapshot(d, week)
+        # conservar las dimensiones de G_t completo para el reporte
+        snap.n_vertices, snap.n_arcs = full.n_vertices, full.n_arcs
+        snap.n_components, snap.W_total_all = full.n_components, full.W_total_all
+    return snap

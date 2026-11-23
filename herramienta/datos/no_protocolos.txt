@@ -1,0 +1,29 @@
+# Vértices de DeXposure que no son protocolos DeFi (curado a mano, nov-2026).
+# Uso: critset experiment --exclude-file datos/no_protocolos.txt
+# Nodo agregado
+Unknown
+# Cadenas (L1/L2)
+Ethereum
+Bitcoin
+Avalanche
+Litecoin
+Cardano
+Arbitrum
+Aptos
+Moonbeam
+# Exchanges centralizados
+Binance CEX
+OKX
+Bitfinex
+Bybit
+HTX
+Gate-io
+Kraken
+Kucoin
+Bitstamp
+Bitget
+Bitmex
+Deribit
+MEXC
+Crypto-com
+Robinhood

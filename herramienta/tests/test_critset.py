@@ -115,3 +115,38 @@ def test_greedy_is_monotone():
     seq = rules.rule_greedy(s, 5, ev=ev)
     vals = [ev.evaluate_set(seq[:k]).R_pond for k in range(1, 6)]
     assert all(a >= b - 1e-12 for a, b in zip(vals, vals[1:]))
+
+
+# ------------------------------------------------- medidas de la revisión final
+@pytest.mark.parametrize("seed", range(8))
+def test_fragment_decomposition_and_frel(seed):
+    s = random_snapshot(seed)
+    ev = Evaluator(s)
+    rng = np.random.default_rng(100 + seed)
+    for _ in range(10):
+        S = rng.choice(s.n, size=rng.integers(1, 8), replace=False)
+        d = ev.evaluate_set(S)
+        # L_est = k/|C| + L_single + L_multi
+        assert d.L_est == pytest.approx(len(S) / s.n + d.L_single + d.L_multi)
+        alive = np.ones(s.n, bool)
+        alive[S] = False
+        comps = sorted((len(c) for c in nx.connected_components(to_nx(s, alive))), reverse=True)
+        assert d.n_single == sum(c == 1 for c in comps[1:])
+        assert d.n_multi == sum(c >= 2 for c in comps[1:])
+        W_minus = s.w[alive[s.src] & alive[s.dst]].sum()
+        assert d.F_rel == pytest.approx(1 - d.R_pond * s.W0 / W_minus)
+        assert -1e-12 <= d.F_rel <= 1 + 1e-12
+
+
+@pytest.mark.parametrize("seed", range(5))
+def test_two_core(seed):
+    from critset.graph import snapshot_from_panel, two_core_names
+    s = random_snapshot(seed)
+    core = set(two_core_names(s))
+    g = to_nx(s)
+    assert core == set(s.names[list(nx.k_core(g, 2).nodes)])
+    rows = [(s.names[a], s.names[b], w) for a, b, w in zip(s.src, s.dst, s.w)]
+    panel = pd.DataFrame(rows, columns=["source", "target", "size"]).assign(time="t")
+    c = snapshot_from_panel(panel, "t", core2=True)
+    assert set(c.names) == core
+    assert (np.diff(c.U.indptr) >= 2).all()
